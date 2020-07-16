@@ -1,0 +1,926 @@
+[
+  {
+    "fileName": "agency",
+    "description": "<a href=\"https://developers.google.com/transit/gtfs/reference#agencytxt\">agency</a><br/><br/>File: <strong>Required</strong>",
+    "properties": [
+      {
+        "fieldName": "agency_id",
+        "type": "ID",
+        "required": false,
+        "description": "Identifies a transit brandwhich is often synonymous with a transit agency. Note that in some cases, such as when a single agency operates multiple separate services, agencies and brands are distinct. This document uses the term \"agency\" in place of \"brand\". A dataset may contain data from multiple agencies. This field is required when the dataset contains data for multiple transit agencies, otherwise it is optional."
+      },
+      {
+        "fieldName": "agency_name",
+        "type": "Text",
+        "required": true,
+        "description": "Full name of the transit agency."
+      },
+      {
+        "fieldName": "agency_url",
+        "type": "URL",
+        "required": true,
+        "description": "URL of the transit agency."
+      },
+      {
+        "fieldName": "agency_timezone",
+        "type": "Timezone",
+        "required": true,
+        "description": "Timezone where the transit agency is located. If multiple agencies are specified in the dataset, each must have the same <code translate=\"no\" dir=\"ltr\">agency_<wbr>timezone</code>."
+      },
+      {
+        "fieldName": "agency_lang",
+        "type": "Language code",
+        "required": false,
+        "description": "Primary language used by this transit agency. This field helps GTFS consumers choose capitalization rules and other language-specific settings for the dataset."
+      },
+      {
+        "fieldName": "agency_phone",
+        "type": "Phone number",
+        "required": false,
+        "description": "A voice telephone number for the specified agency. This field is a string value that presents the telephone number as typical for the agency's service area. It can and should contain punctuation marks to group the digits of the number. Dialable text (for example, TriMet's \"503-238-RIDE\") is permitted, but the field must not contain any other descriptive text."
+      },
+      {
+        "fieldName": "agency_fare_url",
+        "type": "URL",
+        "required": false,
+        "description": "URL of a web page that allows a rider to purchase tickets or other fare instruments for that agency online."
+      },
+      {
+        "fieldName": "agency_email",
+        "type": "Email",
+        "required": false,
+        "description": "Email address actively monitored by the agency’s customer service department. This email address should be a direct contact point where transit riders can reach a customer service representative at the agency."
+      }
+    ]
+  },
+  {
+    "fileName": "stops",
+    "description": "<a href=\"https://developers.google.com/transit/gtfs/reference#stopstxt\">stops</a><br/><br/>File: <strong>Required</strong>",
+    "properties": [
+      {
+        "fieldName": "stop_id",
+        "type": "ID",
+        "required": true,
+        "description": "Identifies a stop, station, or station entrance. <br><br> The term \"station entrance\" refers to both station entrances and station exits. Stops, stations or station entrances are collectively referred to as locations. Multiple routes may use the same stop."
+      },
+      {
+        "fieldName": "stop_code",
+        "type": "Text",
+        "required": false,
+        "description": "Short text or a number that identifies the location for riders. These codes are often used in phone-based transit information systems or printed on signage to make it easier for riders to get information for a particular location. The <code translate=\"no\" dir=\"ltr\">stop_<wbr>code</code> can be the same as <code translate=\"no\" dir=\"ltr\">stop_<wbr>id</code> if it is public facing. This field should be left empty for locations without a code presented to riders."
+      },
+      {
+        "fieldName": "stop_name",
+        "type": "Text",
+        "required": false,
+        "description": "Name of the location. Use a name that people will understand in the local and tourist vernacular.<br><br>When the location is a boarding area (<code translate=\"no\" dir=\"ltr\">location_<wbr>type=4</code>), the <code translate=\"no\" dir=\"ltr\">stop_<wbr>name</code> should contains the name of the boarding area as displayed by the agency. It could be just one letter (like on some European intercity railway stations), or text like “Wheelchair boarding area” (NYC’s Subway) or “Head of short trains” (Paris’ RER).<br><br>Conditionally Required:<br>• <strong>Required</strong> for locations which are stops (<code translate=\"no\" dir=\"ltr\">location_<wbr>type=0</code>), stations (<code translate=\"no\" dir=\"ltr\">location_<wbr>type=1</code>) or entrances/exits (<code translate=\"no\" dir=\"ltr\">location_<wbr>type=2</code>).<br>• Optional for locations which are generic nodes (<code translate=\"no\" dir=\"ltr\">location_<wbr>type=3</code>) or boarding areas (<code translate=\"no\" dir=\"ltr\">location_<wbr>type=4</code>)."
+      },
+      {
+        "fieldName": "stop_desc",
+        "type": "Text",
+        "required": false,
+        "description": "Description of the location that provides useful, quality information. Do not simply duplicate the name of the location."
+      },
+      {
+        "fieldName": "stop_lat",
+        "type": "Latitude",
+        "required": false,
+        "description": "Latitude of the location.<br><br>Conditionally Required:<br>• <strong>Required</strong> for locations which are stops (<code translate=\"no\" dir=\"ltr\">location_<wbr>type=0</code>), stations (<code translate=\"no\" dir=\"ltr\">location_<wbr>type=1</code>) or entrances/exits (<code translate=\"no\" dir=\"ltr\">location_<wbr>type=2</code>).<br>• Optional for locations which are generic nodes (<code translate=\"no\" dir=\"ltr\">location_<wbr>type=3</code>) or boarding areas (<code translate=\"no\" dir=\"ltr\">location_<wbr>type=4</code>)."
+      },
+      {
+        "fieldName": "stop_lon",
+        "type": "Longitude",
+        "required": false,
+        "description": "Longitude of the location.<br><br>Conditionally Required:<br>• <strong>Required</strong> for locations which are stops (<code translate=\"no\" dir=\"ltr\">location_<wbr>type=0</code>), stations (<code translate=\"no\" dir=\"ltr\">location_<wbr>type=1</code>) or entrances/exits (<code translate=\"no\" dir=\"ltr\">location_<wbr>type=2</code>).<br>• Optional for locations which are generic nodes (<code translate=\"no\" dir=\"ltr\">location_<wbr>type=3</code>) or boarding areas (<code translate=\"no\" dir=\"ltr\">location_<wbr>type=4</code>)."
+      },
+      {
+        "fieldName": "zone_id",
+        "type": "ID",
+        "required": false,
+        "description": "Identifies the fare zone for a stop. This field is required if providing fare information using <a href=\"#fare_rulestxt\">fare_rules.txt</a>, otherwise it is optional. If this record represents a station or station entrance, the <code translate=\"no\" dir=\"ltr\">zone_<wbr>id</code> is ignored."
+      },
+      {
+        "fieldName": "stop_url",
+        "type": "URL",
+        "required": false,
+        "description": "URL of a web page about the location. This should be different from the <code translate=\"no\" dir=\"ltr\">agency.<wbr>agency_<wbr>url</code> and the <code translate=\"no\" dir=\"ltr\">routes.<wbr>route_<wbr>url</code> field values."
+      },
+      {
+        "fieldName": "location_type",
+        "type": "Enum",
+        "required": false,
+        "description": "Type of the location:<br>• <code translate=\"no\" dir=\"ltr\">0</code> (or empty): <strong>Stop</strong> (or <strong>Platform</strong>). A location where passengers board or disembark from a transit vehicle. Is called a platform when defined within a <code translate=\"no\" dir=\"ltr\">parent_<wbr>station</code>.<br>• <code translate=\"no\" dir=\"ltr\">1</code>: <strong>Station</strong>. A physical structure or area that contains one or more platform.<br>• <code translate=\"no\" dir=\"ltr\">2</code>: <strong>Entrance/Exit</strong>. A location where passengers can enter or exit a station from the street. If an entrance/exit belongs to multiple stations, it can be linked by pathways to both, but the data provider must pick one of them as parent.<br>• <code translate=\"no\" dir=\"ltr\">3</code>: <strong>Generic Node</strong>. A location within a station, not matching any other <code translate=\"no\" dir=\"ltr\">location_<wbr>type</code>, which can be used to link together pathways define in pathways.txt.<br>• <code translate=\"no\" dir=\"ltr\">4</code>: <strong>Boarding Area</strong>. A specific location on a platform, where passengers can board and/or alight vehicles."
+      },
+      {
+        "fieldName": "parent_station",
+        "type": "ID referencing stops.stop_id",
+        "required": false,
+        "description": "Defines hierarchy between the different locations defined in <code translate=\"no\" dir=\"ltr\">stops.<wbr>txt</code>. It contains the ID of the parent location, as followed:<br>• <strong>Stop/platform</strong> (<code translate=\"no\" dir=\"ltr\">location_<wbr>type=0</code>): the <code translate=\"no\" dir=\"ltr\">parent_<wbr>station</code> field contains the ID of a station.<br>• <strong>Station</strong> (<code translate=\"no\" dir=\"ltr\">location_<wbr>type=1</code>): this field must be empty.<br>• <strong>Entrance/exit</strong> (<code translate=\"no\" dir=\"ltr\">location_<wbr>type=2</code>) or <strong>generic node</strong> (<code translate=\"no\" dir=\"ltr\">location_<wbr>type=3</code>): the <code translate=\"no\" dir=\"ltr\">parent_<wbr>station</code> field contains the ID of a station (<code translate=\"no\" dir=\"ltr\">location_<wbr>type=1</code>)<br>• <strong>Boarding Area</strong> (<code translate=\"no\" dir=\"ltr\">location_<wbr>type=4</code>): the <code translate=\"no\" dir=\"ltr\">parent_<wbr>station</code> field contains ID of a platform.<br><br>Conditionally Required:<br>• <strong>Required</strong> for locations which are entrances (<code translate=\"no\" dir=\"ltr\">location_<wbr>type=2</code>), generic nodes (<code translate=\"no\" dir=\"ltr\">location_<wbr>type=3</code>) or boarding areas (<code translate=\"no\" dir=\"ltr\">location_<wbr>type=4</code>).<br>• Optional for stops/platforms (<code translate=\"no\" dir=\"ltr\">location_<wbr>type=0</code>).<br>• Forbidden for stations (<code translate=\"no\" dir=\"ltr\">location_<wbr>type=1</code>)."
+      },
+      {
+        "fieldName": "stop_timezone",
+        "type": "Timezone",
+        "required": false,
+        "description": "Timezone of the location. If the location has a parent station, it inherits the parent station’s timezone instead of applying its own. Stations and parentless stops with empty <code translate=\"no\" dir=\"ltr\">stop_<wbr>timezone</code> inherit the timezone specified by <code translate=\"no\" dir=\"ltr\">agency.<wbr>agency_<wbr>timezone</code>. If <code translate=\"no\" dir=\"ltr\">stop_<wbr>timezone</code> values are provided, the times in <a href=\"#stop_timestxt\">stop_times.txt</a> should be entered as the time since midnight in the timezone specified by <code translate=\"no\" dir=\"ltr\">agency.<wbr>agency_<wbr>timezone</code>. This ensures that the time values in a trip always increase over the course of a trip, regardless of which timezones the trip crosses."
+      },
+      {
+        "fieldName": "wheelchair_boarding",
+        "type": "Enum",
+        "required": false,
+        "description": "Indicates whether wheelchair boardings are possible from the location. Valid options are: <br><br>For parentless stops:<br><code translate=\"no\" dir=\"ltr\">0</code> or empty - No accessibility information for the stop.<br><code translate=\"no\" dir=\"ltr\">1</code> - Some vehicles at this stop can be boarded by a rider in a wheelchair.<br><code translate=\"no\" dir=\"ltr\">2</code> - Wheelchair boarding is not possible at this stop. <br><br>For child stops: <br><code translate=\"no\" dir=\"ltr\">0</code> or empty - Stop will inherit its <code translate=\"no\" dir=\"ltr\">wheelchair_<wbr>boarding</code> behavior from the parent station, if specified in the parent.<br><code translate=\"no\" dir=\"ltr\">1</code> - There exists some accessible path from outside the station to the specific stop/platform.<br><code translate=\"no\" dir=\"ltr\">2</code> - There exists no accessible path from outside the station to the specific stop/platform.<br><br> For station entrances/exits: <br><code translate=\"no\" dir=\"ltr\">0</code> or empty - Station entrance will inherit its <code translate=\"no\" dir=\"ltr\">wheelchair_<wbr>boarding</code> behavior from the parent station, if specified for the parent.<br><code translate=\"no\" dir=\"ltr\">1</code> - Station entrance is wheelchair accessible.<br><code translate=\"no\" dir=\"ltr\">2</code> - No accessible path from station entrance to stops/platforms."
+      },
+      {
+        "fieldName": "level_id",
+        "type": "ID referencing levels.level_id",
+        "required": false,
+        "description": "Level of the location. The same level can be used by multiple unlinked stations."
+      },
+      {
+        "fieldName": "platform_code",
+        "type": "Text",
+        "required": false,
+        "description": "Platform identifier for a platform stop (a stop belonging to a station). This should be just the platform identifier (eg. \"G\" or \"3\"). Words like “platform” or \"track\" (or the feed’s language-specific equivalent) should not be included. This allows feed consumers to more easily internationalize and localize the platform identifier into other languages."
+      }
+    ]
+  },
+  {
+    "fileName": "routes",
+    "description": "<a href=\"https://developers.google.com/transit/gtfs/reference#routestxt\">routes</a><br/><br/>File: <strong>Required</strong>",
+    "properties": [
+      {
+        "fieldName": "route_id",
+        "type": "ID",
+        "required": true,
+        "description": "Identifies a route."
+      },
+      {
+        "fieldName": "agency_id",
+        "type": "ID referencing agency.agency_id",
+        "required": false,
+        "description": "Agency for the specified route. This field is required when the dataset provides data for routes from more than one agency in <a href=\"#agencytxt\">agency.txt</a>, otherwise it is optional."
+      },
+      {
+        "fieldName": "route_short_name",
+        "type": "Text",
+        "required": false,
+        "description": "Short name of a route. This will often be a short, abstract identifier like \"32\", \"100X\", or \"Green\" that riders use to identify a route, but which doesn't give any indication of what places the route serves. Either <code translate=\"no\" dir=\"ltr\">route_<wbr>short_<wbr>name</code> or <code translate=\"no\" dir=\"ltr\">route_<wbr>long_<wbr>name</code> must be specified, or potentially both if appropriate."
+      },
+      {
+        "fieldName": "route_long_name",
+        "type": "Text",
+        "required": false,
+        "description": "Full name of a route. This name is generally more descriptive than the <code translate=\"no\" dir=\"ltr\">route_<wbr>short_<wbr>name</code> and often includes the route's destination or stop. Either <code translate=\"no\" dir=\"ltr\">route_<wbr>short_<wbr>name</code> or <code translate=\"no\" dir=\"ltr\">route_<wbr>long_<wbr>name</code> must be specified, or potentially both if appropriate."
+      },
+      {
+        "fieldName": "route_desc",
+        "type": "Text",
+        "required": false,
+        "description": "Description of a route that provides useful, quality information. Do not simply duplicate the name of the route. <hr> <em>Example: \"A\" trains operate between Inwood-207 St, Manhattan and Far Rockaway-Mott Avenue, Queens at all times. Also from about 6AM until about midnight, additional \"A\" trains operate between Inwood-207 St and Lefferts Boulevard (trains typically alternate between Lefferts Blvd and Far Rockaway).</em>"
+      },
+      {
+        "fieldName": "route_type",
+        "type": "Enum",
+        "required": true,
+        "description": "Indicates the type of transportation used on a route. Valid options are: <br><br><code translate=\"no\" dir=\"ltr\">0</code> - Tram, Streetcar, Light rail. Any light rail or street level system within a metropolitan area.<br><code translate=\"no\" dir=\"ltr\">1</code> - Subway, Metro. Any underground rail system within a metropolitan area.<br><code translate=\"no\" dir=\"ltr\">2</code> - Rail. Used for intercity or long-distance travel.<br><code translate=\"no\" dir=\"ltr\">3</code> - Bus. Used for short- and long-distance bus routes.<br><code translate=\"no\" dir=\"ltr\">4</code> - Ferry. Used for short- and long-distance boat service.<br><code translate=\"no\" dir=\"ltr\">5</code> - Cable tram. Used for street-level rail cars where the cable runs beneath the vehicle, e.g., cable car in San Francisco.<br><code translate=\"no\" dir=\"ltr\">6</code> - Aerial lift, suspended cable car (e.g., gondola lift, aerial tramway). Cable transport where cabins, cars, gondolas or open chairs are suspended by means of one or more cables.<br><code translate=\"no\" dir=\"ltr\">7</code> - Funicular. Any rail system designed for steep inclines.<br><code translate=\"no\" dir=\"ltr\">11</code> - Trolleybus. Electric buses that draw power from overhead wires using poles.<br><code translate=\"no\" dir=\"ltr\">12</code> - Monorail. Railway in which the track consists of a single rail or a beam."
+      },
+      {
+        "fieldName": "route_url",
+        "type": "URL",
+        "required": false,
+        "description": "URL of a web page about the particular route. Should be different from the <code translate=\"no\" dir=\"ltr\">agency.<wbr>agency_<wbr>url</code> value."
+      },
+      {
+        "fieldName": "route_color",
+        "type": "Color",
+        "required": false,
+        "description": "Route color designation that matches public facing material. Defaults to white (<code translate=\"no\" dir=\"ltr\">FFFFFF</code>) when omitted or left empty. The color difference between <code translate=\"no\" dir=\"ltr\">route_<wbr>color</code> and <code translate=\"no\" dir=\"ltr\">route_<wbr>text_<wbr>color</code> should provide sufficient contrast when viewed on a black and white screen."
+      },
+      {
+        "fieldName": "route_text_color",
+        "type": "Color",
+        "required": false,
+        "description": "Legible color to use for text drawn against a background of <code translate=\"no\" dir=\"ltr\">route_<wbr>color</code>. Defaults to black (<code translate=\"no\" dir=\"ltr\">000000</code>) when omitted or left empty. The color difference between <code translate=\"no\" dir=\"ltr\">route_<wbr>color</code> and <code translate=\"no\" dir=\"ltr\">route_<wbr>text_<wbr>color</code> should provide sufficient contrast when viewed on a black and white screen."
+      },
+      {
+        "fieldName": "route_sort_order",
+        "type": "Non-negative integer",
+        "required": false,
+        "description": "Orders the routes in a way which is ideal for presentation to customers. Routes with smaller <code translate=\"no\" dir=\"ltr\">route_<wbr>sort_<wbr>order</code> values should be displayed first."
+      },
+      {
+        "fieldName": "continuous_pickup",
+        "type": "Enum",
+        "required": false,
+        "description": "Indicates whether a rider can board the transit vehicle anywhere along the vehicle’s travel path. The path is described by <a href=\"/transit/gtfs/reference#shapestxt\"><code translate=\"no\" dir=\"ltr\">shapes.txt</code></a> on every trip of the route. Valid options are:<br><br><code translate=\"no\" dir=\"ltr\">0</code> - Continuous stopping pickup.<br><code translate=\"no\" dir=\"ltr\">1</code> or empty - No continuous stopping pickup.<br><code translate=\"no\" dir=\"ltr\">2</code> - Must phone an agency to arrange continuous stopping pickup.<br><code translate=\"no\" dir=\"ltr\">3</code> - Must coordinate with a driver to arrange continuous stopping pickup.<br><br>The default continuous pickup behavior defined in <code translate=\"no\" dir=\"ltr\">routes.<wbr>txt</code> can be overridden in <a href=\"/transit/gtfs/reference#stop_timestxt\"><code translate=\"no\" dir=\"ltr\">stop_times.txt</code></a>."
+      },
+      {
+        "fieldName": "continuous_drop_off",
+        "type": "Enum",
+        "required": false,
+        "description": "Indicates whether a rider can alight from the transit vehicle at any point along the vehicle’s travel path. The path is described by <code translate=\"no\" dir=\"ltr\">shapes.<wbr>txt</code> on every trip of the route. Valid options are:<br><br><code translate=\"no\" dir=\"ltr\">0</code>- Continuous stopping drop-off.<br><code translate=\"no\" dir=\"ltr\">1</code> or empty - No continuous stopping drop-off.<br><code translate=\"no\" dir=\"ltr\">2</code> - Must phone an agency to arrange continuous stopping drop-off.<br><code translate=\"no\" dir=\"ltr\">3</code> - Must coordinate with a driver to arrange continuous stopping drop-off.<br><br>The default continuous drop-off behavior defined in <code translate=\"no\" dir=\"ltr\">routes.<wbr>txt</code> can be overridden in <code translate=\"no\" dir=\"ltr\">stop_<wbr>times.<wbr>txt</code>."
+      }
+    ]
+  },
+  {
+    "fileName": "trips",
+    "description": "<a href=\"https://developers.google.com/transit/gtfs/reference#tripstxt\">trips</a><br/><br/>File: <strong>Required</strong>",
+    "properties": [
+      {
+        "fieldName": "route_id",
+        "type": "ID referencing routes.route_id",
+        "required": true,
+        "description": "Identifies a route."
+      },
+      {
+        "fieldName": "service_id",
+        "type": "ID referencing calendar.service_id or calendar_dates.service_id",
+        "required": true,
+        "description": "Identifies a set of dates when service is available for one or more routes."
+      },
+      {
+        "fieldName": "trip_id",
+        "type": "ID",
+        "required": true,
+        "description": "Identifies a trip."
+      },
+      {
+        "fieldName": "trip_headsign",
+        "type": "Text",
+        "required": false,
+        "description": "Text that appears on signage identifying the trip's destination to riders. Use this field to distinguish between different patterns of service on the same route. If the headsign changes during a trip, <code translate=\"no\" dir=\"ltr\">trip_<wbr>headsign</code> can be overridden by specifying values for the <code translate=\"no\" dir=\"ltr\">stop_<wbr>times.<wbr>stop_<wbr>headsign</code>."
+      },
+      {
+        "fieldName": "trip_short_name",
+        "type": "Text",
+        "required": false,
+        "description": "Public facing text used to identify the trip to riders, for instance, to identify train numbers for commuter rail trips. If riders do not commonly rely on trip names, leave this field empty.  A <code translate=\"no\" dir=\"ltr\">trip_<wbr>short_<wbr>name</code> value, if provided, should uniquely identify a trip within a service day; it should not be used for destination names or limited/express designations."
+      },
+      {
+        "fieldName": "direction_id",
+        "type": "Enum",
+        "required": false,
+        "description": "Indicates the direction of travel for a trip. This field is not used in routing; it provides a way to separate trips by direction when publishing time tables. Valid options are: <br><br><code translate=\"no\" dir=\"ltr\">0</code> - Travel in one direction (e.g. outbound travel).<br><code translate=\"no\" dir=\"ltr\">1</code> - Travel in the opposite direction (e.g. inbound travel).<hr><em>Example: The <code translate=\"no\" dir=\"ltr\">trip_headsign</code> and <code translate=\"no\" dir=\"ltr\">direction_id</code> fields could be used together to assign a name to travel in each direction for a set of trips. A <a href=\"#tripstxt\">trips.txt</a> file could contain these records for use in time tables:</em> <br> <code translate=\"no\" dir=\"ltr\">trip_<wbr>id,<wbr>.<wbr>.<wbr>.<wbr>,<wbr>trip_<wbr>headsign,<wbr>direction_<wbr>id</code> <br> <code translate=\"no\" dir=\"ltr\">1234,<wbr>.<wbr>.<wbr>.<wbr>,<wbr>Airport,<wbr>0</code> <br> <code translate=\"no\" dir=\"ltr\">1505,<wbr>.<wbr>.<wbr>.<wbr>,<wbr>Downtown,<wbr>1</code>"
+      },
+      {
+        "fieldName": "block_id",
+        "type": "ID",
+        "required": false,
+        "description": "Identifies the block to which the trip belongs. A block consists of a single trip or many sequential trips made using the same vehicle, defined by shared service days and <code translate=\"no\" dir=\"ltr\">block_<wbr>id</code>. A <code translate=\"no\" dir=\"ltr\">block_<wbr>id</code> can have trips with different service days, making distinct blocks. See the <a href=\"#example-blocks-and-service-day\">example below</a>"
+      },
+      {
+        "fieldName": "shape_id",
+        "type": "ID referencing shapes.shape_id",
+        "required": false,
+        "description": "Identifies a geospatial shape that describes the vehicle travel path for a trip.<br><br>Conditionally required:<br> This field is required if the trip has continuous behavior defined, either at the route level or at the stop time level.<br>Otherwise, it's optional."
+      },
+      {
+        "fieldName": "wheelchair_accessible",
+        "type": "Enum",
+        "required": false,
+        "description": "Indicates wheelchair accessibility. Valid options are:<br><br><code translate=\"no\" dir=\"ltr\">0</code> or empty - No accessibility information for the trip.<br><code translate=\"no\" dir=\"ltr\">1</code> - Vehicle being used on this particular trip can accommodate at least one rider in a wheelchair.<br><code translate=\"no\" dir=\"ltr\">2</code> - No riders in wheelchairs can be accommodated on this trip."
+      },
+      {
+        "fieldName": "bikes_allowed",
+        "type": "Enum",
+        "required": false,
+        "description": "Indicates whether bikes are allowed. Valid options are:<br><br><code translate=\"no\" dir=\"ltr\">0</code> or empty - No bike information for the trip.<br><code translate=\"no\" dir=\"ltr\">1</code> - Vehicle being used on this particular trip can accommodate at least one bicycle.<br><code translate=\"no\" dir=\"ltr\">2</code> - No bicycles are allowed on this trip."
+      }
+    ]
+  },
+  {
+    "fileName": "stop_times",
+    "description": "<a href=\"https://developers.google.com/transit/gtfs/reference#stop_timestxt\">stop_times</a><br/><br/>File: <strong>Required</strong>",
+    "properties": [
+      {
+        "fieldName": "trip_id",
+        "type": "ID referencing trips.trip_id",
+        "required": true,
+        "description": "Identifies a trip."
+      },
+      {
+        "fieldName": "arrival_time",
+        "type": "Time",
+        "required": false,
+        "description": "Arrival time at a specific stop for a specific trip on a route. If there are not separate times for arrival and departure at a stop, enter the same value for <code translate=\"no\" dir=\"ltr\">arrival_<wbr>time</code> and <code translate=\"no\" dir=\"ltr\">departure_<wbr>time</code>. For times occurring after midnight on the service day, enter the time as a value greater than 24:00:00 in HH:MM:SS local time for the day on which the trip schedule begins.<br><br>Scheduled stops where the vehicle strictly adheres to the specified arrival and departure times are timepoints. If this stop is not a timepoint, it is recommended to provide an estimated or interpolated time. If this is not available, arrival_time can be left empty. Further, indicate that interpolated times are provided with <code translate=\"no\" dir=\"ltr\">timepoint</code>=<code translate=\"no\" dir=\"ltr\">0</code>. If interpolated times are indicated with <code translate=\"no\" dir=\"ltr\">timepoint</code>=<code translate=\"no\" dir=\"ltr\">0</code>, then time points must be indicated with <code translate=\"no\" dir=\"ltr\">timepoint</code>=<code translate=\"no\" dir=\"ltr\">1</code>. Provide arrival times for all stops that are time points. An arrival time must be specified for the first and the last stop in a trip."
+      },
+      {
+        "fieldName": "departure_time",
+        "type": "Time",
+        "required": false,
+        "description": "Departure time from a specific stop for a specific trip on a route. For times occurring after midnight on the service day, enter the time as a value greater than 24:00:00 in HH:MM:SS local time for the day on which the trip schedule begins. If there are not separate times for arrival and departure at a stop, enter the same value for <code translate=\"no\" dir=\"ltr\">arrival_<wbr>time</code> and <code translate=\"no\" dir=\"ltr\">departure_<wbr>time</code>. See the <code translate=\"no\" dir=\"ltr\">arrival_<wbr>time</code> description for more details about using timepoints correctly. <br><br> The <code translate=\"no\" dir=\"ltr\">departure_<wbr>time</code> field should specify time values whenever possible, including non-binding estimated or interpolated times between timepoints."
+      },
+      {
+        "fieldName": "stop_id",
+        "type": "ID referencing stops.stop_id",
+        "required": true,
+        "description": "Identifies the serviced stop. All stops serviced during a trip must have a record in <a href=\"#stop_timestxt\">stop_times.txt</a>. Referenced locations must be stops, not stations or station entrances. A stop may be serviced multiple times in the same trip, and multiple trips and routes may service the same stop."
+      },
+      {
+        "fieldName": "stop_sequence",
+        "type": "Non-negative integer",
+        "required": true,
+        "description": "Order of stops for a particular trip. The values must increase along the trip but do not need to be consecutive.<hr><em>Example: The first location on the trip could have a <code translate=\"no\" dir=\"ltr\">stop_sequence</code>=<code translate=\"no\" dir=\"ltr\">1</code>, the second location on the trip could have a <code translate=\"no\" dir=\"ltr\">stop_sequence</code>=<code translate=\"no\" dir=\"ltr\">23</code>, the third location could have a <code translate=\"no\" dir=\"ltr\">stop_sequence</code>=<code translate=\"no\" dir=\"ltr\">40</code>, and so on.</em>"
+      },
+      {
+        "fieldName": "stop_headsign",
+        "type": "Text",
+        "required": false,
+        "description": "Text that appears on signage identifying the trip's destination to riders. This field overrides the default <code translate=\"no\" dir=\"ltr\">trips.<wbr>trip_<wbr>headsign</code> when the headsign changes between stops. If the headsign is displayed for an entire trip, use <code translate=\"no\" dir=\"ltr\">trips.<wbr>trip_<wbr>headsign</code> instead. <br><br>  A <code translate=\"no\" dir=\"ltr\">stop_<wbr>headsign</code> value specified for one <code translate=\"no\" dir=\"ltr\">stop_<wbr>time</code> does not apply to subsequent <code translate=\"no\" dir=\"ltr\">stop_<wbr>time</code>s in the same trip. If you want to override the <code translate=\"no\" dir=\"ltr\">trip_<wbr>headsign</code> for multiple <code translate=\"no\" dir=\"ltr\">stop_<wbr>time</code>s in the same trip, the <code translate=\"no\" dir=\"ltr\">stop_<wbr>headsign</code> value must be repeated in each <code translate=\"no\" dir=\"ltr\">stop_<wbr>time</code> row."
+      },
+      {
+        "fieldName": "pickup_type",
+        "type": "Enum",
+        "required": false,
+        "description": "Indicates pickup method. Valid options are:<br><br><code translate=\"no\" dir=\"ltr\">0</code> or empty - Regularly scheduled pickup. <br><code translate=\"no\" dir=\"ltr\">1</code> - No pickup available.<br><code translate=\"no\" dir=\"ltr\">2</code> - Must phone agency to arrange pickup.<br><code translate=\"no\" dir=\"ltr\">3</code> - Must coordinate with driver to arrange pickup."
+      },
+      {
+        "fieldName": "drop_off_type",
+        "type": "Enum",
+        "required": false,
+        "description": "Indicates drop off method. Valid options are:<br><br><code translate=\"no\" dir=\"ltr\">0</code> or empty - Regularly scheduled drop off.<br><code translate=\"no\" dir=\"ltr\">1</code> - No drop off available.<br><code translate=\"no\" dir=\"ltr\">2</code> - Must phone agency to arrange drop off.<br><code translate=\"no\" dir=\"ltr\">3</code> - Must coordinate with driver to arrange drop off."
+      },
+      {
+        "fieldName": "continuous_pickup",
+        "type": "Enum",
+        "required": false,
+        "description": "Indicates whether a rider can board the transit vehicle at any point along the vehicle’s travel path. The path is described by <code translate=\"no\" dir=\"ltr\">shapes.<wbr>txt</code>, from this <code translate=\"no\" dir=\"ltr\">stop_<wbr>time</code> to the next <code translate=\"no\" dir=\"ltr\">stop_<wbr>time</code> in the trip’s <code translate=\"no\" dir=\"ltr\">stop_<wbr>sequence</code>. Valid options are:<br><br><code translate=\"no\" dir=\"ltr\">0</code> - Continuous stopping pickup.<br><code translate=\"no\" dir=\"ltr\">1</code> or empty - No continuous stopping pickup.<br><code translate=\"no\" dir=\"ltr\">2</code> - Must phone an agency to arrange continuous pickup.<br><code translate=\"no\" dir=\"ltr\">3</code> - Must coordinate with a driver to arrange continuous stopping pickup.<br><br>The continuous pickup behavior indicated in <code translate=\"no\" dir=\"ltr\">stop_<wbr>times.<wbr>txt</code> overrides any behavior defined in <code translate=\"no\" dir=\"ltr\">routes.<wbr>txt</code>."
+      },
+      {
+        "fieldName": "continuous_drop_off",
+        "type": "Enum",
+        "required": false,
+        "description": "Indicates whether a rider can alight from the transit vehicle at any point along the vehicle’s travel path as described by <code translate=\"no\" dir=\"ltr\">shapes.<wbr>txt</code>, from this <code translate=\"no\" dir=\"ltr\">stop_<wbr>time</code> to the next <code translate=\"no\" dir=\"ltr\">stop_<wbr>time</code> in the trip’s <code translate=\"no\" dir=\"ltr\">stop_<wbr>sequence</code>.<br><br><code translate=\"no\" dir=\"ltr\">0</code> - Continuous stopping drop off.<br><code translate=\"no\" dir=\"ltr\">1</code> or empty - No continuous stopping drop off.<br><code translate=\"no\" dir=\"ltr\">2</code> - Must phone an agency to arrange continuous drop off.<br><code translate=\"no\" dir=\"ltr\">3</code> - Must coordinate with a driver to arrange continuous stopping drop off.<br><br>The continuous drop-off behavior indicated in <code translate=\"no\" dir=\"ltr\">stop_<wbr>times.<wbr>txt</code> overrides any behavior defined in <code translate=\"no\" dir=\"ltr\">routes.<wbr>txt</code>."
+      },
+      {
+        "fieldName": "shape_dist_traveled",
+        "type": "Non-negative float",
+        "required": false,
+        "description": "Actual distance traveled along the associated shape, from the first stop to the stop specified in this record. This field specifies how much of the shape to draw between any two stops during a trip. Must be in the same units used in <a href=\"#shapestxt\">shapes.txt</a>. Values used for <code translate=\"no\" dir=\"ltr\">shape_<wbr>dist_<wbr>traveled</code> must increase along with <code translate=\"no\" dir=\"ltr\">stop_<wbr>sequence</code>; they cannot be used to show reverse travel along a route.<hr><em>Example: If a bus travels a distance of 5.25 kilometers from the start of the shape to the stop,<code translate=\"no\" dir=\"ltr\">shape_dist_traveled</code>=<code translate=\"no\" dir=\"ltr\">5.25</code>.</em>"
+      },
+      {
+        "fieldName": "timepoint",
+        "type": "Enum",
+        "required": false,
+        "description": "Indicates if arrival and departure times for a stop are strictly adhered to by the vehicle or if they are instead approximate and/or interpolated times. This field allows a GTFS producer to provide interpolated stop-times, while indicating that the times are approximate. Valid options are:<br><br><code translate=\"no\" dir=\"ltr\">0</code> - Times are considered approximate.<br><code translate=\"no\" dir=\"ltr\">1</code> or empty - Times are considered exact."
+      }
+    ]
+  },
+  {
+    "fileName": "calendar",
+    "description": "<a href=\"https://developers.google.com/transit/gtfs/reference#calendartxt\">calendar</a><br/><br/>File: <strong>Conditionally required</strong>",
+    "properties": [
+      {
+        "fieldName": "service_id",
+        "type": "ID",
+        "required": true,
+        "description": "Uniquely identifies a set of dates when service is available for one or more routes. Each <code translate=\"no\" dir=\"ltr\">service_<wbr>id</code> value can appear at most once in a <a href=\"#calendartxt\">calendar.txt</a> file."
+      },
+      {
+        "fieldName": "monday",
+        "type": "Enum",
+        "required": true,
+        "description": "Indicates whether the service operates on all Mondays in the date range specified by the <code translate=\"no\" dir=\"ltr\">start_<wbr>date</code> and <code translate=\"no\" dir=\"ltr\">end_<wbr>date</code> fields. Note that exceptions for particular dates may be listed in <a href=\"#calendar_datestxt\">calendar_dates.txt</a>. Valid options are:<br><br><code translate=\"no\" dir=\"ltr\">1</code> - Service is available for all Mondays in the date range.<br><code translate=\"no\" dir=\"ltr\">0</code> - Service is not available for Mondays in the date range."
+      },
+      {
+        "fieldName": "tuesday",
+        "type": "Enum",
+        "required": true,
+        "description": "Functions in the same way as <code translate=\"no\" dir=\"ltr\">monday</code> except applies to Tuesdays"
+      },
+      {
+        "fieldName": "wednesday",
+        "type": "Enum",
+        "required": true,
+        "description": "Functions in the same way as <code translate=\"no\" dir=\"ltr\">monday</code> except applies to Wednesdays"
+      },
+      {
+        "fieldName": "thursday",
+        "type": "Enum",
+        "required": true,
+        "description": "Functions in the same way as <code translate=\"no\" dir=\"ltr\">monday</code> except applies to Thursdays"
+      },
+      {
+        "fieldName": "friday",
+        "type": "Enum",
+        "required": true,
+        "description": "Functions in the same way as <code translate=\"no\" dir=\"ltr\">monday</code> except applies to Fridays"
+      },
+      {
+        "fieldName": "saturday",
+        "type": "Enum",
+        "required": true,
+        "description": "Functions in the same way as <code translate=\"no\" dir=\"ltr\">monday</code> except applies to Saturdays."
+      },
+      {
+        "fieldName": "sunday",
+        "type": "Enum",
+        "required": true,
+        "description": "Functions in the same way as <code translate=\"no\" dir=\"ltr\">monday</code> except applies to Sundays."
+      },
+      {
+        "fieldName": "start_date",
+        "type": "Date",
+        "required": true,
+        "description": "Start service day for the service interval."
+      },
+      {
+        "fieldName": "end_date",
+        "type": "Date",
+        "required": true,
+        "description": "End service day for the service interval. This service day is included in the interval."
+      }
+    ]
+  },
+  {
+    "fileName": "calendar_dates",
+    "description": "<a href=\"https://developers.google.com/transit/gtfs/reference#calendar_datestxt\">calendar_dates</a><br/><br/>File: <strong>Conditionally required</strong>The <a href=\"#calendar_datestxt\">calendar_dates.txt</a> table can explicitly activate or disable service by date. It can be used in two ways.\n<li>Recommended: Use <a href=\"#calendar_datestxt\">calendar_dates.txt</a> in conjunction with <a href=\"#calendartxt\">calendar.txt</a> to define exceptions to the default service patterns defined in <a href=\"#calendartxt\">calendar.txt</a>. If service is generally regular, with a few changes on explicit dates (for instance, to accommodate special event services, or a school schedule), this is a good approach. In this case <code translate=\"no\" dir=\"ltr\">calendar_dates.service_id</code> is an ID referencing <code translate=\"no\" dir=\"ltr\">calendar.service_id</code>.</li>\n<li>Alternate: Omit <a href=\"#calendartxt\">calendar.txt</a>, and specify each date of service in <a href=\"#calendar_datestxt\">calendar_dates.txt</a>. This allows for considerable service variation and accommodates service without normal weekly schedules. In this case <code translate=\"no\" dir=\"ltr\">service_id</code> is an ID.</li>\n",
+    "properties": [
+      {
+        "fieldName": "service_id",
+        "type": "ID referencing calendar.service_id or ID",
+        "required": true,
+        "description": "Identifies a set of dates when a service exception occurs for one or more routes. Each (<code translate=\"no\" dir=\"ltr\">service_<wbr>id</code>, <code translate=\"no\" dir=\"ltr\">date</code>) pair can only appear once in <a href=\"#calendar_datestxt\">calendar_dates.txt</a> if using <a href=\"#calendartxt\">calendar.txt</a> and <a href=\"#calendar_datestxt\">calendar_dates.txt</a> in conjunction. If a <code translate=\"no\" dir=\"ltr\">service_<wbr>id</code> value appears in both <a href=\"#calendartxt\">calendar.txt</a> and <a href=\"#calendar_datestxt\">calendar_dates.txt</a>, the information in <a href=\"#calendar_datestxt\">calendar_dates.txt</a> modifies the service information specified in <a href=\"#calendartxt\">calendar.txt</a>."
+      },
+      {
+        "fieldName": "date",
+        "type": "Date",
+        "required": true,
+        "description": "Date when service exception occurs."
+      },
+      {
+        "fieldName": "exception_type",
+        "type": "Enum",
+        "required": true,
+        "description": "Indicates whether service is available on the date specified in the date field. Valid options are:<br><br> <code translate=\"no\" dir=\"ltr\">1</code> - Service has been added for the specified date.<br><code translate=\"no\" dir=\"ltr\">2</code> - Service has been removed for the specified date.<hr><em>Example: Suppose a route has one set of trips available on holidays and another set of trips available on all other days. One <code translate=\"no\" dir=\"ltr\">service_id</code> could correspond to the regular service schedule and another <code translate=\"no\" dir=\"ltr\">service_id</code> could correspond to the holiday schedule. For a particular holiday, the <a href=\"#calendar_datestxt\">calendar_dates.txt</a> file could be used to add the holiday to the holiday <code translate=\"no\" dir=\"ltr\">service_id</code> and to remove the holiday from the regular <code translate=\"no\" dir=\"ltr\">service_id</code> schedule.</em>"
+      }
+    ]
+  },
+  {
+    "fileName": "fare_attributes",
+    "description": "<a href=\"https://developers.google.com/transit/gtfs/reference#fare_attributestxt\">fare_attributes</a><br/><br/>File: <strong>Optional</strong>",
+    "properties": [
+      {
+        "fieldName": "fare_id",
+        "type": "ID",
+        "required": true,
+        "description": "Identifies a fare class."
+      },
+      {
+        "fieldName": "price",
+        "type": "Non-negative float",
+        "required": true,
+        "description": "Fare price, in the unit specified by <code translate=\"no\" dir=\"ltr\">currency_<wbr>type</code>."
+      },
+      {
+        "fieldName": "currency_type",
+        "type": "Currency code",
+        "required": true,
+        "description": "Currency used to pay the fare."
+      },
+      {
+        "fieldName": "payment_method",
+        "type": "Enum",
+        "required": true,
+        "description": "Indicates when the fare must be paid. Valid options are:<br><br><code translate=\"no\" dir=\"ltr\">0</code> - Fare is paid on board.<br><code translate=\"no\" dir=\"ltr\">1</code> - Fare must be paid before boarding."
+      },
+      {
+        "fieldName": "transfers",
+        "type": "Enum",
+        "required": true,
+        "description": "Indicates the number of transfers permitted on this fare. The fact that this field can be left empty is an exception to the requirement that a Required field must not be empty. Valid options are:<br><br><code translate=\"no\" dir=\"ltr\">0</code> - No transfers permitted on this fare.<br><code translate=\"no\" dir=\"ltr\">1</code> - Riders may transfer once.<br><code translate=\"no\" dir=\"ltr\">2</code> - Riders may transfer twice.<br>empty - Unlimited transfers are permitted."
+      },
+      {
+        "fieldName": "agency_id",
+        "type": "ID referencing agency.agency_id",
+        "required": false,
+        "description": "Identifies the relevant agency for a fare. This field is required for datasets with multiple agencies defined in <a href=\"#agencytxt\">agency.txt</a>, otherwise it is optional."
+      },
+      {
+        "fieldName": "transfer_duration",
+        "type": "Non-negative integer",
+        "required": false,
+        "description": "Length of time in seconds before a transfer expires. When <code translate=\"no\" dir=\"ltr\">transfers</code>=<code translate=\"no\" dir=\"ltr\">0</code> this field can be used to indicate how long a ticket is valid for or it can can be left empty."
+      }
+    ]
+  },
+  {
+    "fileName": "fare_rules",
+    "description": "<a href=\"https://developers.google.com/transit/gtfs/reference#fare_rulestxt\">fare_rules</a><br/><br/>File: <strong>Optional</strong>The <a href=\"#fare_rulestxt\">fare_rules.txt</a> table specifies how fares in <a href=\"#fare_attributestxt\">fare_attributes.txt</a> apply to an itinerary. Most fare structures use some combination of the following rules:\n<li>Fare depends on origin or destination stations.</li>\n<li>Fare depends on which zones the itinerary passes through.</li>\n<li>Fare depends on which route the itinerary uses.</li>\nFor examples that demonstrate how to specify a fare structure with <a href=\"#fare_rulestxt\">fare_rules.txt</a> and <a href=\"#fare_attributestxt\">fare_attributes.txt</a>, see <a href=\"https://code.google.com/p/googletransitdatafeed/wiki/FareExamples\">https://code.google.com/p/googletransitdatafeed/wiki/FareExamples</a> in the GoogleTransitDataFeed open source project wiki.",
+    "properties": [
+      {
+        "fieldName": "fare_id",
+        "type": "ID referencing fare_attributes.fare_id",
+        "required": true,
+        "description": "Identifies a fare class."
+      },
+      {
+        "fieldName": "route_id",
+        "type": "ID referencing routes.route_id",
+        "required": false,
+        "description": "Identifies a route associated with the fare class. If several routes with the same fare attributes exist, create a record in <a href=\"#fare_rulestxt\">fare_rules.txt</a> for each route.<hr><em>Example: If fare class \"b\" is valid on route \"TSW\" and \"TSE\", the <a href=\"#fare_rulestxt\">fare_rules.txt</a> file would contain these records for the fare class:</em> <br> <code translate=\"no\" dir=\"ltr\">fare_<wbr>id,<wbr>route_<wbr>id</code><br><code translate=\"no\" dir=\"ltr\">b,<wbr>TSW</code> <br> <code translate=\"no\" dir=\"ltr\">b,<wbr>TSE</code>"
+      },
+      {
+        "fieldName": "origin_id",
+        "type": "ID referencing stops.zone_id",
+        "required": false,
+        "description": "Identifies an origin zone. If a fare class has multiple origin zones, create a record in <a href=\"#fare_rulestxt\">fare_rules.txt</a> for each <code translate=\"no\" dir=\"ltr\">origin_<wbr>id</code>.<hr><em>Example: If fare class \"b\" is valid for all travel originating from either zone \"2\" or zone \"8\", the <a href=\"#fare_rulestxt\">fare_rules.txt</a> file would contain these records for the fare class:</em> <br> <code translate=\"no\" dir=\"ltr\">fare_<wbr>id,<wbr>.<wbr>.<wbr>.<wbr>,<wbr>origin_<wbr>id</code> <br> <code translate=\"no\" dir=\"ltr\">b,<wbr>.<wbr>.<wbr>.<wbr>,<wbr>2</code>  <br> <code translate=\"no\" dir=\"ltr\">b,<wbr>.<wbr>.<wbr>.<wbr>,<wbr>8</code>"
+      },
+      {
+        "fieldName": "destination_id",
+        "type": "ID referencing stops.zone_id",
+        "required": false,
+        "description": "Identifies a destination zone. If a fare class has multiple destination zones, create a record in <a href=\"#fare_rulestxt\">fare_rules.txt</a> for each <code translate=\"no\" dir=\"ltr\">destination_<wbr>id</code>.<hr><em>Example: The <code translate=\"no\" dir=\"ltr\">origin_id</code> and <code translate=\"no\" dir=\"ltr\">destination_id</code> fields could be used together to specify that fare class \"b\" is valid for travel between zones 3 and 4, and for travel between zones 3 and 5, the <a href=\"#fare_rulestxt\">fare_rules.txt</a> file would contain these records for the fare class:</em> <br><code translate=\"no\" dir=\"ltr\">fare_<wbr>id,<wbr>.<wbr>.<wbr>.<wbr>,<wbr>origin_<wbr>id,<wbr>destination_<wbr>id</code> <br><code translate=\"no\" dir=\"ltr\">b,<wbr>.<wbr>.<wbr>.<wbr>,<wbr>3,<wbr>4</code><br> <code translate=\"no\" dir=\"ltr\">b,<wbr>.<wbr>.<wbr>.<wbr>,<wbr>3,<wbr>5</code>"
+      },
+      {
+        "fieldName": "contains_id",
+        "type": "ID referencing stops.zone_id",
+        "required": false,
+        "description": "Identifies the zones that a rider will enter while using a given fare class. Used in some systems to calculate correct fare class. <hr><em>Example: If fare class \"c\" is associated with all travel on the GRT route that passes through zones 5, 6, and 7 the <a href=\"#fare_rulestxt\">fare_rules.txt</a> would contain these records:</em> <br> <code translate=\"no\" dir=\"ltr\">fare_<wbr>id,<wbr>route_<wbr>id,<wbr>.<wbr>.<wbr>.<wbr>,<wbr>contains_<wbr>id</code> <br>  <code translate=\"no\" dir=\"ltr\">c,<wbr>GRT,<wbr>.<wbr>.<wbr>.<wbr>,<wbr>5</code> <br><code translate=\"no\" dir=\"ltr\">c,<wbr>GRT,<wbr>.<wbr>.<wbr>.<wbr>,<wbr>6</code> <br><code translate=\"no\" dir=\"ltr\">c,<wbr>GRT,<wbr>.<wbr>.<wbr>.<wbr>,<wbr>7</code> <br> <em>Because all <code translate=\"no\" dir=\"ltr\">contains_id</code> zones must be matched for the fare to apply, an itinerary that passes through zones 5 and 6 but not zone 7 would not have fare class \"c\". For more detail, see <a href=\"https://code.google.com/p/googletransitdatafeed/wiki/FareExamples\">https://code.google.com/p/googletransitdatafeed/wiki/FareExamples</a> in the GoogleTransitDataFeed project wiki.</em>"
+      }
+    ]
+  },
+  {
+    "fileName": "shapes",
+    "description": "<a href=\"https://developers.google.com/transit/gtfs/reference#shapestxt\">shapes</a><br/><br/>File: <strong>Optional</strong>Shapes describe the path that a vehicle travels along a route alignment, and are defined in the file shapes.txt. Shapes are associated with Trips, and consist of a sequence of points through which the vehicle passes in order. Shapes do not need to intercept the location of Stops exactly, but all Stops on a trip should lie within a small distance of the shape for that trip, i.e. close to straight line segments connecting the shape points.",
+    "properties": [
+      {
+        "fieldName": "shape_id",
+        "type": "ID",
+        "required": true,
+        "description": "Identifies a shape."
+      },
+      {
+        "fieldName": "shape_pt_lat",
+        "type": "Latitude",
+        "required": true,
+        "description": "Latitude of a shape point. Each record in <a href=\"#shapestxt\">shapes.txt</a> represents a shape point used to define the shape."
+      },
+      {
+        "fieldName": "shape_pt_lon",
+        "type": "Longitude",
+        "required": true,
+        "description": "Longitude of a shape point."
+      },
+      {
+        "fieldName": "shape_pt_sequence",
+        "type": "Non-negative integer",
+        "required": true,
+        "description": "Sequence in which the shape points connect to form the shape. Values must increase along the trip but do not need to be consecutive.<hr><em>Example: If the shape \"A_shp\" has three points in its definition, the <a href=\"#shapestxt\">shapes.txt</a> file might contain these records to define the shape:</em> <br> <code translate=\"no\" dir=\"ltr\">shape_<wbr>id,<wbr>shape_<wbr>pt_<wbr>lat,<wbr>shape_<wbr>pt_<wbr>lon,<wbr>shape_<wbr>pt_<wbr>sequence</code> <br> <code translate=\"no\" dir=\"ltr\">A_<wbr>shp,<wbr>37.<wbr>61956,<wbr>-122.<wbr>48161,<wbr>0</code> <br> <code translate=\"no\" dir=\"ltr\">A_<wbr>shp,<wbr>37.<wbr>64430,<wbr>-122.<wbr>41070,<wbr>6</code> <br> <code translate=\"no\" dir=\"ltr\">A_<wbr>shp,<wbr>37.<wbr>65863,<wbr>-122.<wbr>30839,<wbr>11</code>"
+      },
+      {
+        "fieldName": "shape_dist_traveled",
+        "type": "Non-negative float",
+        "required": false,
+        "description": "Actual distance traveled along the shape from the first shape point to the point specified in this record. Used by trip planners to show the correct portion of the shape on a map. Values must increase along with <code translate=\"no\" dir=\"ltr\">shape_<wbr>pt_<wbr>sequence</code>; they cannot be used to show reverse travel along a route. Distance units must be consistent with those used in <a href=\"#stop_timestxt\">stop_times.txt</a>.<hr><em>Example: If a bus travels along the three points defined above for A_shp, the additional <code translate=\"no\" dir=\"ltr\">shape_dist_traveled</code> values (shown here in kilometers) would look like this:</em> <br> <code translate=\"no\" dir=\"ltr\">shape_<wbr>id,<wbr>shape_<wbr>pt_<wbr>lat,<wbr>shape_<wbr>pt_<wbr>lon,<wbr>shape_<wbr>pt_<wbr>sequence,<wbr>shape_<wbr>dist_<wbr>traveled</code> <br> <code translate=\"no\" dir=\"ltr\">A_<wbr>shp,<wbr>37.<wbr>61956,<wbr>-122.<wbr>48161,<wbr>0,<wbr>0</code><br><code translate=\"no\" dir=\"ltr\">A_<wbr>shp,<wbr>37.<wbr>64430,<wbr>-122.<wbr>41070,<wbr>6,<wbr>6.<wbr>8310</code> <br> <code translate=\"no\" dir=\"ltr\">A_<wbr>shp,<wbr>37.<wbr>65863,<wbr>-122.<wbr>30839,<wbr>11,<wbr>15.<wbr>8765</code>"
+      }
+    ]
+  },
+  {
+    "fileName": "frequencies",
+    "description": "<a href=\"https://developers.google.com/transit/gtfs/reference#frequenciestxt\">frequencies</a><br/><br/>File: <strong>Optional</strong><a href=\"#frequenciestxt\">Frequencies.txt</a> represents trips that operate on regular headways (time between trips). This file can be used to represent two different types of service.\n<li>Frequency-based service (<code translate=\"no\" dir=\"ltr\">exact_times</code>=<code translate=\"no\" dir=\"ltr\">0</code>) in which service does not follow a fixed schedule throughout the day. Instead, operators attempt to strictly maintain predetermined headways for trips.</li>\n<li>A compressed representation of schedule-based service (<code translate=\"no\" dir=\"ltr\">exact_times</code>=<code translate=\"no\" dir=\"ltr\">1</code>) that has the exact same headway for trips over specified time period(s). In schedule-based service operators try to strictly adhere to a schedule.</li>\n",
+    "properties": [
+      {
+        "fieldName": "trip_id",
+        "type": "ID referencing trips.trip_id",
+        "required": true,
+        "description": "Identifies a trip to which the specified headway of service applies."
+      },
+      {
+        "fieldName": "start_time",
+        "type": "Time",
+        "required": true,
+        "description": "Time at which the first vehicle departs from the first stop of the trip with the specified headway."
+      },
+      {
+        "fieldName": "end_time",
+        "type": "Time",
+        "required": true,
+        "description": "Time at which service changes to a different headway (or ceases) at the first stop in the trip."
+      },
+      {
+        "fieldName": "headway_secs",
+        "type": "Non-negative integer",
+        "required": true,
+        "description": "Time, in seconds, between departures from the same stop (headway) for the trip, during the time interval specified by <code translate=\"no\" dir=\"ltr\">start_<wbr>time</code> and <code translate=\"no\" dir=\"ltr\">end_<wbr>time</code>. Multiple headways for the same trip are allowed, but may not overlap. New headways may start at the exact time the previous headway ends."
+      },
+      {
+        "fieldName": "exact_times",
+        "type": "Enum",
+        "required": false,
+        "description": "Indicates the type of service for a trip. See the file description for more information. Valid options are:<br><br><code translate=\"no\" dir=\"ltr\">0</code> or empty - Frequency-based trips.<br><code translate=\"no\" dir=\"ltr\">1</code> - Schedule-based trips with the exact same headway throughout the day. In this case the <code translate=\"no\" dir=\"ltr\">end_<wbr>time</code> value must be greater than the last desired trip <code translate=\"no\" dir=\"ltr\">start_<wbr>time</code> but less than the last desired trip start_time + <code translate=\"no\" dir=\"ltr\">headway_<wbr>secs</code>."
+      }
+    ]
+  },
+  {
+    "fileName": "transfers",
+    "description": "<a href=\"https://developers.google.com/transit/gtfs/reference#transferstxt\">transfers</a><br/><br/>File: <strong>Optional</strong>When calculating an itinerary, GTFS-consuming applications interpolate transfers based on allowable time and stop proximity. <a href=\"#transferstxt\">Transfers.txt</a> specifies additional rules and overrides for selected transfers.",
+    "properties": [
+      {
+        "fieldName": "from_stop_id",
+        "type": "ID referencing stops.stop_id",
+        "required": true,
+        "description": "Identifies a stop or station where a connection between routes begins. If this field refers to a station, the transfer rule applies to all its child stops."
+      },
+      {
+        "fieldName": "to_stop_id",
+        "type": "ID referencing stops.stop_id",
+        "required": true,
+        "description": "Identifies a stop or station where a connection between routes ends. If this field refers to a station, the transfer rule applies to all child stops."
+      },
+      {
+        "fieldName": "transfer_type",
+        "type": "Enum",
+        "required": true,
+        "description": "Indicates the type of connection for the specified (<code translate=\"no\" dir=\"ltr\">from_<wbr>stop_<wbr>id</code>, <code translate=\"no\" dir=\"ltr\">to_<wbr>stop_<wbr>id</code>) pair. Valid options are:<br><br> <code translate=\"no\" dir=\"ltr\">0</code> or empty - Recommended transfer point between routes.<br><code translate=\"no\" dir=\"ltr\">1</code> - Timed transfer point between two routes. The departing vehicle is expected to wait for the arriving one and leave sufficient time for a rider to transfer between routes.<br><code translate=\"no\" dir=\"ltr\">2</code> - Transfer requires a minimum amount of time between arrival and departure to ensure a connection. The time required to transfer is specified by <code translate=\"no\" dir=\"ltr\">min_<wbr>transfer_<wbr>time</code>.<br><code translate=\"no\" dir=\"ltr\">3</code> - Transfers are not possible between routes at the location."
+      },
+      {
+        "fieldName": "min_transfer_time",
+        "type": "Non-negative integer",
+        "required": false,
+        "description": "Amount of time, in seconds, that must be available to permit a transfer between routes at the specified stops. The <code translate=\"no\" dir=\"ltr\">min_<wbr>transfer_<wbr>time</code> should be sufficient to permit a typical rider to move between the two stops, including buffer time to allow for schedule variance on each route."
+      }
+    ]
+  },
+  {
+    "fileName": "pathways",
+    "description": "<a href=\"https://developers.google.com/transit/gtfs/reference#pathwaystxt\">pathways</a><br/><br/>File: <strong>Optional</strong>The GTFS-Pathways extension uses a graph representation to describe subway or train, with nodes (the locations) and edges (the pathways).To go from the entrance (which is a node represented as a location with location_type=2) to a platform (which is a node represented as a location with location_type=0), the rider will go through walkway, fare gates, stairs, etc (which are edges represented as pathways). The proposal also adds another type of location, a generic one called \"generic node\", to represent for example a walkway crossing from which different walkways can be taken.<strong>Warning: Pathways must be exhaustive in a station.</strong> As consequence, as soon as one platform (as stop), entrance or node belonging to a station has a pathway linked to it, the station is assumed to have exhaustive description of its pathways. Therefore, the following common sense rules apply:\n<li>No dangling location: If any location within a station has a pathway, then all locations should have pathways (except for those platforms that have boarding areas).</li>\n<li>No locked platforms: Each platform must be connected to at least one entrance via some chain of pathways. There are very rare stations in the real life where you cannot go outside.</li>\n<li>No pathways for a platform with boarding areas: A platform that has boarding areas is treated as a parent object, not a point. It may not have pathways assigned. All pathways should be for boarding areas.</li>\n",
+    "properties": [
+      {
+        "fieldName": "pathway_id",
+        "type": "ID",
+        "required": true,
+        "description": "The <code translate=\"no\" dir=\"ltr\">pathway_<wbr>id</code> field contains an ID that uniquely identifies the pathway. The <code translate=\"no\" dir=\"ltr\">pathway_<wbr>id</code> is used by systems as an internal identifier of this record (e.g., primary key in database), and therefore the <code translate=\"no\" dir=\"ltr\">pathway_<wbr>id</code> must be dataset unique. <br> Different pathways can go from the same <code translate=\"no\" dir=\"ltr\">from_<wbr>stop_<wbr>id</code> to the same <code translate=\"no\" dir=\"ltr\">to_<wbr>stop_<wbr>id</code>. For example, this happens when two escalators are side by side in opposite direction, or when a stair is nearby and elevator and both go from the same place to the same place."
+      },
+      {
+        "fieldName": "from_stop_id",
+        "type": "ID referencing stops.stop_id",
+        "required": true,
+        "description": "Location at which the pathway begins. It contains a <code translate=\"no\" dir=\"ltr\">stop_<wbr>id</code> that identifies a platform, entrance/exit, generic node or boarding area from the <code translate=\"no\" dir=\"ltr\">stops.<wbr>txt</code> file."
+      },
+      {
+        "fieldName": "to_stop_id",
+        "type": "ID referencing stops.stop_id",
+        "required": true,
+        "description": "Location at which the pathway ends. It contains a <code translate=\"no\" dir=\"ltr\">stop_<wbr>id</code> that identifies a platform, entrance/exit, generic node or boarding area from the <code translate=\"no\" dir=\"ltr\">stops.<wbr>txt</code> file."
+      },
+      {
+        "fieldName": "pathway_mode",
+        "type": "Enum",
+        "required": true,
+        "description": "Type of pathway between the specified (<code translate=\"no\" dir=\"ltr\">from_<wbr>stop_<wbr>id</code>, <code translate=\"no\" dir=\"ltr\">to_<wbr>stop_<wbr>id</code>) pair. Valid values for this field are: <br> • 1: walkway <br> • 2: stairs <br> • 3: moving sidewalk/travelator <br> • 4: escalator <br> • 5: elevator <br> • 6: fare gate (or payment gate): A pathway that crosses into an area of the station where a proof of payment is required (usually via a physical payment gate).<br>Fare gates may either separate paid areas of the station from unpaid ones, or separate different payment areas within the same station from each other. This information can be used to avoid routing passengers through stations using shortcuts that would require passengers to make unnecessary payments, like directing a passenger to walk through a subway platform to reach a busway. <br> • 7: exit gate: Indicates a pathway exiting an area where proof-of-payment is required into an area where proof-of-payment is no longer required."
+      },
+      {
+        "fieldName": "is_bidirectional",
+        "type": "Enum",
+        "required": true,
+        "description": "Indicates in which direction the pathway can be used:<br>• 0: Unidirectional pathway, it can only be used from <code translate=\"no\" dir=\"ltr\">from_<wbr>stop_<wbr>id</code> to <code translate=\"no\" dir=\"ltr\">to_<wbr>stop_<wbr>id</code>.<br>• 1: Bidirectional pathway, it can be used in the two directions.<br><br>Fare gates (<code translate=\"no\" dir=\"ltr\">pathway_<wbr>mode=6</code>) and exit gates (<code translate=\"no\" dir=\"ltr\">pathway_<wbr>mode=7</code>) cannot be bidirectional."
+      },
+      {
+        "fieldName": "length",
+        "type": "Non-negative Float",
+        "required": false,
+        "description": "Horizontal length in meters of the pathway from the origin location (defined in <code translate=\"no\" dir=\"ltr\">from_<wbr>stop_<wbr>id</code>) to the destination location (defined in <code translate=\"no\" dir=\"ltr\">to_<wbr>stop_<wbr>id</code>).<br><br>This field is recommended for walkways (<code translate=\"no\" dir=\"ltr\">pathway_<wbr>mode=1</code>), fare gates (<code translate=\"no\" dir=\"ltr\">pathway_<wbr>mode=6</code>) and exit gates (<code translate=\"no\" dir=\"ltr\">pathway_<wbr>mode=7</code>)."
+      },
+      {
+        "fieldName": "traversal_time",
+        "type": "Positive Integer",
+        "required": false,
+        "description": "Average time in seconds needed to walk through the pathway from the origin location (defined in <code translate=\"no\" dir=\"ltr\">from_<wbr>stop_<wbr>id</code>) to the destination location (defined in <code translate=\"no\" dir=\"ltr\">to_<wbr>stop_<wbr>id</code>).<br><br>This field is recommended for moving sidewalks (<code translate=\"no\" dir=\"ltr\">pathway_<wbr>mode=3</code>), escalators (<code translate=\"no\" dir=\"ltr\">pathway_<wbr>mode=4</code>) and elevator (<code translate=\"no\" dir=\"ltr\">pathway_<wbr>mode=5</code>)."
+      },
+      {
+        "fieldName": "stair_count",
+        "type": "Non-null Integer",
+        "required": false,
+        "description": "Number of stairs of the pathway.<br><br>Best Practices: one could use the approximation of 1 floor = 15 stairs to generate approximative values.<br><br>A positive <code translate=\"no\" dir=\"ltr\">stair_<wbr>count</code> implies that the rider walk up from <code translate=\"no\" dir=\"ltr\">from_<wbr>stop_<wbr>id</code> to <code translate=\"no\" dir=\"ltr\">to_<wbr>stop_<wbr>id</code>. And a negative <code translate=\"no\" dir=\"ltr\">stair_<wbr>count</code> implies that the rider walk down from <code translate=\"no\" dir=\"ltr\">from_<wbr>stop_<wbr>id</code> to <code translate=\"no\" dir=\"ltr\">to_<wbr>stop_<wbr>id</code>.<br><br>This field is recommended for stairs (<code translate=\"no\" dir=\"ltr\">pathway_<wbr>mode=2</code>)."
+      },
+      {
+        "fieldName": "max_slope",
+        "type": "Float",
+        "required": false,
+        "description": "Maximum slope ratio of the pathway. Valid values for this field are:<br>• 0 or (empty): no slope.<br>• A float: slope ratio of the pathway, positive for upwards, negative for downwards.<br><br>This field should be used only with walkways (<code translate=\"no\" dir=\"ltr\">pathway_<wbr>type=1</code>) and moving sidewalks (<code translate=\"no\" dir=\"ltr\">pathway_<wbr>type=3</code>).<br><br>Example: In the US, 0.083 (also written 8.3%) is the maximum slope ratio for hand-propelled wheelchair, which mean an increase of 0.083m (so 8.3cm) for each 1m."
+      },
+      {
+        "fieldName": "min_width",
+        "type": "Positive Float",
+        "required": false,
+        "description": "Minimum width of the pathway in meters.<br><br>This field is highly recommended if the minimum width is less than 1 meter."
+      },
+      {
+        "fieldName": "signposted_as",
+        "type": "Text",
+        "required": false,
+        "description": "String of text from physical signage visible to transit riders. The string can be used to provide text directions to users, such as 'follow signs to '. The language text should appear in this field exactly how it is printed on the signs - it should not be translated."
+      },
+      {
+        "fieldName": "reversed_signposted_as",
+        "type": "Text",
+        "required": false,
+        "description": "Same than the <code translate=\"no\" dir=\"ltr\">signposted_<wbr>as</code> field, but when the pathways is used backward, i.e. from the <code translate=\"no\" dir=\"ltr\">to_<wbr>stop_<wbr>id</code> to the <code translate=\"no\" dir=\"ltr\">from_<wbr>stop_<wbr>id</code>."
+      }
+    ]
+  },
+  {
+    "fileName": "levels",
+    "description": "<a href=\"https://developers.google.com/transit/gtfs/reference#levelstxt\">levels</a><br/><br/>File: <strong>Optional</strong>Describe the different levels of a station. Is mostly useful when used in conjunction with <code translate=\"no\" dir=\"ltr\">pathways.txt</code>, and is required for elevator (<code translate=\"no\" dir=\"ltr\">pathway_mode=5</code>) to ask the user to take the elevator to the “Mezzanine” or the “Platform” level.",
+    "properties": [
+      {
+        "fieldName": "level_id",
+        "type": "ID",
+        "required": true,
+        "description": "Id of the level that can be referenced from <code translate=\"no\" dir=\"ltr\">stops.<wbr>txt</code>."
+      },
+      {
+        "fieldName": "level_index",
+        "type": "Float",
+        "required": true,
+        "description": "Numeric index of the level that indicates relative position of this level in relation to other levels (levels with higher indices are assumed to be located above levels with lower indices).<br><br>Ground level should have index 0, with levels above ground indicated by positive indices and levels below ground by negative indices."
+      },
+      {
+        "fieldName": "level_name",
+        "type": "Text",
+        "required": false,
+        "description": "Optional name of the level (that matches level lettering/numbering used inside the building or the station). Is useful for elevator routing (e.g. “take the elevator to level “Mezzanine” or “Platforms” or “-1”)."
+      }
+    ]
+  },
+  {
+    "fileName": "feed_info",
+    "description": "<a href=\"https://developers.google.com/transit/gtfs/reference#feed_infotxt\">feed_info</a><br/><br/>File: <strong>Conditionally required</strong>This file contains information about the dataset itself, rather than the services the dataset describes. In some cases, the publisher of the dataset differs from the agencies. If <a href=\"/transit/gtfs/reference#translationstxt\">translations.txt</a> is provided, this file is required.",
+    "properties": [
+      {
+        "fieldName": "feed_publisher_name",
+        "type": "Text",
+        "required": true,
+        "description": "Full name of the organization that publishes the dataset. This might be the same as one of the <code translate=\"no\" dir=\"ltr\">agency.<wbr>agency_<wbr>name</code> values."
+      },
+      {
+        "fieldName": "feed_publisher_url",
+        "type": "URL",
+        "required": true,
+        "description": "URL of the dataset publishing organization's website. This may be the same as one of the <code translate=\"no\" dir=\"ltr\">agency.<wbr>agency_<wbr>url</code> values."
+      },
+      {
+        "fieldName": "feed_lang",
+        "type": "Language code",
+        "required": true,
+        "description": "Default language for the text in this dataset. This setting helps GTFS consumers choose capitalization rules and other language-specific settings for the dataset.<br><br>To define another language, use the <code translate=\"no\" dir=\"ltr\">language</code> field in <a href=\"#translationstxt\">translations.txt</a>.<br><br>Multilingual datasets might be the default language with the original text in multiple languages. In such cases, use the <a href=\"https://www.loc.gov/standards/iso639-2/php/code_list.php\">ISO 639-2</a> language code <code translate=\"no\" dir=\"ltr\">mul</code> in the <code translate=\"no\" dir=\"ltr\">feed_<wbr>lang</code> field. Provide a translation for each of the languages used in the dataset in <a href=\"#translationstxt\">translations.txt</a>. If all of the original text in the dataset is in the same language, don't use <code translate=\"no\" dir=\"ltr\">mul</code>.<br><br>For example, a dataset in Switzerland might set the original <code translate=\"no\" dir=\"ltr\">stops.<wbr>stop_<wbr>name</code> field populated with stop names in different languages. Each stop name is written in accordance with the dominant language in that stop’s geographic location. Stop names include Genève for the French-speaking city of Geneva, Zürich for the German-speaking city of Zurich, and Biel/Bienne for the bilingual city of Biel/Bienne. Set <code translate=\"no\" dir=\"ltr\">feed_<wbr>lang=mul</code> and provide the following translations in <a href=\"#translationstxt\">translations.txt</a>:<ul><li><strong>German:</strong> \"Genf,\" \"Zürich,\" and \"Biel\"</li><li><strong>French:</strong> \"Genève,\" \"Zurich,\" and \"Bienne\"</li><li><strong>Italian:</strong> \"Ginevra,\" \"Zurigo,\" and \"Bienna\"</li><li><strong>English:</strong> \"Geneva,\" \"Zurich,\" and \"Biel/Bienne\"</li></ul>"
+      },
+      {
+        "fieldName": "default_lang",
+        "type": "Language code",
+        "required": false,
+        "description": "Defines the language used when the data consumer doesn’t know the language of the rider. It's often defined as <code translate=\"no\" dir=\"ltr\">en</code>, English."
+      },
+      {
+        "fieldName": "feed_start_date",
+        "type": "Date",
+        "required": false,
+        "description": "The dataset provides complete and reliable schedule information for service in the period from the beginning of the <code translate=\"no\" dir=\"ltr\">feed_<wbr>start_<wbr>date</code> day to the end of the <code translate=\"no\" dir=\"ltr\">feed_<wbr>end_<wbr>date</code> day. Both days can be left empty if unavailable. The <code translate=\"no\" dir=\"ltr\">feed_<wbr>end_<wbr>date</code> date must not precede the <code translate=\"no\" dir=\"ltr\">feed_<wbr>start_<wbr>date</code> date if both are given. Dataset providers are encouraged to give schedule data outside this period to advise of likely future service, but dataset consumers should treat it mindful of its non-authoritative status. If <code translate=\"no\" dir=\"ltr\">feed_<wbr>start_<wbr>date</code> or <code translate=\"no\" dir=\"ltr\">feed_<wbr>end_<wbr>date</code> extend beyond the active calendar dates defined in <a href=\"#calendartxt\">calendar.txt</a> and <a href=\"#calendar_datestxt\">calendar_dates.txt</a>, the dataset is making an explicit assertion that there is no service for dates within the <code translate=\"no\" dir=\"ltr\">feed_<wbr>start_<wbr>date</code> to <code translate=\"no\" dir=\"ltr\">feed_<wbr>end_<wbr>date</code> range but not included in the active calendar dates."
+      },
+      {
+        "fieldName": "feed_end_date",
+        "type": "Date",
+        "required": false,
+        "description": "Refer to the <code translate=\"no\" dir=\"ltr\">feed_<wbr>start_<wbr>date</code> row in this table."
+      },
+      {
+        "fieldName": "feed_version",
+        "type": "Text",
+        "required": false,
+        "description": "String that indicates the current version of their GTFS dataset. GTFS-consuming applications can display this value to help dataset publishers determine whether the latest dataset has been incorporated."
+      },
+      {
+        "fieldName": "feed_contact_email",
+        "type": "Email",
+        "required": false,
+        "description": "Email address for communication regarding the GTFS dataset and data publishing practices. <code translate=\"no\" dir=\"ltr\">feed_<wbr>contact_<wbr>email</code> is a technical contact for GTFS-consuming applications. Provide customer service contact information through <a href=\"#agencytxt\">agency.txt</a>."
+      },
+      {
+        "fieldName": "feed_contact_url",
+        "type": "URL",
+        "required": false,
+        "description": "URL for contact information, a web-form, support desk, or other tools for communication regarding the GTFS dataset and data publishing practices. <code translate=\"no\" dir=\"ltr\">feed_<wbr>contact_<wbr>url</code> is a technical contact for GTFS-consuming applications. Provide customer service contact information through <a href=\"#agencytxt\">agency.txt</a>."
+      }
+    ]
+  },
+  {
+    "fileName": "translations",
+    "description": "<a href=\"https://developers.google.com/transit/gtfs/reference#translationstxt\">translations</a><br/><br/>File: <strong>Optional</strong>",
+    "properties": [
+      {
+        "fieldName": "table_name",
+        "type": "Enum",
+        "required": true,
+        "description": "\n        <p>Defines the dataset table that contains the field to be translated. The following values\n          are allowed:</p>\n        <ul>\n          <li><code translate=\"no\" dir=\"ltr\">agency</code></li>\n          <li><code translate=\"no\" dir=\"ltr\">stops</code></li>\n          <li><code translate=\"no\" dir=\"ltr\">routes</code></li>\n          <li><code translate=\"no\" dir=\"ltr\">trips</code></li>\n          <li><code translate=\"no\" dir=\"ltr\">stop_times</code></li>\n          <li><code translate=\"no\" dir=\"ltr\">feed_info</code></li>\n          <li><code translate=\"no\" dir=\"ltr\">pathways</code></li>\n          <li><code translate=\"no\" dir=\"ltr\">levels</code></li>\n          <li><code translate=\"no\" dir=\"ltr\">attributions</code></li>\n        </ul>\n        <aside class=\"note\"><b>Note:</b> Don't include the .txt file extension after the table's\n          name.</aside>\n      "
+      },
+      {
+        "fieldName": "field_name",
+        "type": "Text",
+        "required": true,
+        "description": "\n        <p>Provides the name of the field to be translated. Fields with the type \"Text\" can be\n          translated, while fields with the types \"URL,\" \"Email,\" and \"Phone number\" can be\n          included here to provide those resources in the correct language.</p>\n        <aside class=\"note\"><b>Note:</b> Fields with other types are ignored and will not be\n          translated.</aside>\n      "
+      },
+      {
+        "fieldName": "language",
+        "type": "Language code",
+        "required": true,
+        "description": "\n        <p>Provides the language of translation.</p>\n        <p>If this language is the same as the one from <code translate=\"no\" dir=\"ltr\">feed_lang</code> in\n          <a href=\"/transit/gtfs/reference#feed_infotxt\">feed_info.txt</a>, the original value of\n          the field is the default value used in languages without specific translations.</p>\n        <p>For example, in Switzerland, a city in a bilingual canton is officially called\n          \"Biel/Bienne,\" but it would simply be called \"Bienne\" in French and \"Biel\" in German.</p>\n      "
+      },
+      {
+        "fieldName": "translation",
+        "type": "Text, URL, Email, or Phone number",
+        "required": true,
+        "description": "Provides the translated value for the specified <code translate=\"no\" dir=\"ltr\">field_<wbr>name</code>."
+      },
+      {
+        "fieldName": "record_id",
+        "type": "ID",
+        "required": false,
+        "description": "\n        <p>Defines the record that corresponds to the field to be translated. The value in\n          <code translate=\"no\" dir=\"ltr\">record_id</code> needs to be a main ID from a dataset table, as defined in the\n          following table:</p>\n\n        <div class=\"devsite-table-wrapper\"><table>\n          <thead>\n            <tr>\n              <th><code translate=\"no\" dir=\"ltr\">table_<wbr>name</code></th>\n              <th><code translate=\"no\" dir=\"ltr\">record_<wbr>id</code></th>\n            </tr>\n          </thead>\n          <tbody>\n            <tr>\n              <td><code translate=\"no\" dir=\"ltr\">agency</code></td>\n              <td><code translate=\"no\" dir=\"ltr\"><a href=\"/transit/gtfs/reference#agencytxt\">agency_<wbr>id</a></code></td>\n            </tr>\n            <tr>\n              <td><code translate=\"no\" dir=\"ltr\">stops</code></td>\n              <td><code translate=\"no\" dir=\"ltr\"><a href=\"/transit/gtfs/reference#stopstxt\">stop_<wbr>id</a></code></td>\n            </tr>\n            <tr>\n              <td><code translate=\"no\" dir=\"ltr\">routes</code></td>\n              <td><code translate=\"no\" dir=\"ltr\"><a href=\"/transit/gtfs/reference#routestxt\">route_<wbr>id</a></code></td>\n            </tr>\n            <tr>\n              <td><code translate=\"no\" dir=\"ltr\">trips</code></td>\n              <td><code translate=\"no\" dir=\"ltr\"><a href=\"/transit/gtfs/reference#tripstxt\">trip_<wbr>id</a></code></td>\n            </tr>\n            <tr>\n              <td><code translate=\"no\" dir=\"ltr\">stop_<wbr>times</code></td>\n              <td><code translate=\"no\" dir=\"ltr\"><a href=\"/transit/gtfs/reference#tripstxt\">trip_<wbr>id</a></code></td>\n            </tr>\n            <tr>\n              <td><code translate=\"no\" dir=\"ltr\">pathways</code></td>\n              <td><code translate=\"no\" dir=\"ltr\"><a href=\"/transit/gtfs/reference#pathwaystxt\">pathway_<wbr>id</a></code></td>\n            </tr>\n            <tr>\n              <td><code translate=\"no\" dir=\"ltr\">levels</code></td>\n              <td><code translate=\"no\" dir=\"ltr\"><a href=\"/transit/gtfs/reference#levelstxt\">level_<wbr>id</a></code></td>\n            </tr>\n            <tr>\n              <td><code translate=\"no\" dir=\"ltr\">attributions</code></td>\n              <td><code translate=\"no\" dir=\"ltr\"><a href=\"/transit/gtfs/reference#attributionstxt\">attribution_<wbr>id</a></code></td>\n            </tr>\n          </tbody>\n        </table></div>\n        <p>The following conditions determine how this field can be used:</p>\n        <ul>\n          <li>Forbidden if <code translate=\"no\" dir=\"ltr\">table_name</code> equals <code translate=\"no\" dir=\"ltr\">feed_info</code>.</li>\n          <li>Forbidden if <code translate=\"no\" dir=\"ltr\">field_value</code> is defined.</li>\n          <li>Required if <code translate=\"no\" dir=\"ltr\">field_value</code> is empty.</li>\n        </ul>\n      "
+      },
+      {
+        "fieldName": "record_sub_id",
+        "type": "ID",
+        "required": false,
+        "description": "\n        <p>Helps to translate the record that contains the field when the table referenced in\n          <code translate=\"no\" dir=\"ltr\">record_id</code> doesn’t have a unique ID. The value in <code translate=\"no\" dir=\"ltr\">record_sub_id</code>\n          is the secondary ID of a dataset table, as defined in the following table:</p>\n\n      <div class=\"devsite-table-wrapper\"><table>\n        <thead>\n          <tr>\n            <th><code translate=\"no\" dir=\"ltr\">table_<wbr>name</code></th>\n            <th><code translate=\"no\" dir=\"ltr\">record_<wbr>sub_<wbr>id</code></th>\n          </tr>\n        </thead>\n        <tbody>\n          <tr>\n            <td><code translate=\"no\" dir=\"ltr\">agency</code></td>\n            <td><code translate=\"no\" dir=\"ltr\">NONE</code></td>\n          </tr>\n          <tr>\n            <td><code translate=\"no\" dir=\"ltr\">stops</code></td>\n            <td><code translate=\"no\" dir=\"ltr\">NONE</code></td>\n          </tr>\n          <tr>\n            <td><code translate=\"no\" dir=\"ltr\">routes</code></td>\n            <td><code translate=\"no\" dir=\"ltr\">NONE</code></td>\n          </tr>\n          <tr>\n            <td><code translate=\"no\" dir=\"ltr\">trips</code></td>\n            <td><code translate=\"no\" dir=\"ltr\">NONE</code></td>\n          </tr>\n          <tr>\n            <td><code translate=\"no\" dir=\"ltr\">stop_<wbr>times</code></td>\n            <td><code translate=\"no\" dir=\"ltr\">stop_<wbr>sequence</code></td>\n          </tr>\n          <tr>\n            <td><code translate=\"no\" dir=\"ltr\">pathways</code></td>\n            <td><code translate=\"no\" dir=\"ltr\">NONE</code></td>\n          </tr>\n          <tr>\n            <td><code translate=\"no\" dir=\"ltr\">levels</code></td>\n            <td><code translate=\"no\" dir=\"ltr\">NONE</code></td>\n          </tr>\n          <tr>\n            <td><code translate=\"no\" dir=\"ltr\">attributions</code></td>\n            <td><code translate=\"no\" dir=\"ltr\">NONE</code></td>\n          </tr>\n        </tbody>\n      </table></div>\n\n<p>The following conditions determine how this field can be used:</p>\n\n<ul>\n  <li>Forbidden if <code translate=\"no\" dir=\"ltr\">table_name</code> equals <code translate=\"no\" dir=\"ltr\">feed_info</code>.</li>\n  <li>Forbidden if <code translate=\"no\" dir=\"ltr\">field_value</code> is defined.</li>\n  <li>Required if <code translate=\"no\" dir=\"ltr\">table_name</code> equals <code translate=\"no\" dir=\"ltr\">stop_times</code> and\n    <code translate=\"no\" dir=\"ltr\">record_id</code> is defined.</li>\n</ul>\n\n<p></p>"
+      },
+      {
+        "fieldName": "field_value",
+        "type": "Text, URL, Email, or Phone number",
+        "required": false,
+        "description": "\n      <p>Instead of using <code translate=\"no\" dir=\"ltr\">record_id</code> and <code translate=\"no\" dir=\"ltr\">record_sub_id</code> to define which\n        record needs to be translated, <code translate=\"no\" dir=\"ltr\">field_value</code> can be used to define the value\n        for translation. When used, the translation is applied when the field identified by\n        <code translate=\"no\" dir=\"ltr\">table_name</code> and <code translate=\"no\" dir=\"ltr\">field_name</code> contains the exact same value defined\n        in <code translate=\"no\" dir=\"ltr\">field_value</code>.</p>\n      <p>The field must exactly match the value defined in <code translate=\"no\" dir=\"ltr\">field_value</code>. If only a\n        subset of the value matches <code translate=\"no\" dir=\"ltr\">field_value</code>, the translation isn't applied.</p>\n      <p>If two translation rules match the same record, one with <code translate=\"no\" dir=\"ltr\">field_value</code> and the\n        other one with <code translate=\"no\" dir=\"ltr\">record_id</code>, then the rule with <code translate=\"no\" dir=\"ltr\">record_id</code> is the\n        one that needs to be used.</p>\n      <p>The following conditions determine how this field can be used:</p>\n      <ul>\n        <li>Forbidden if <code translate=\"no\" dir=\"ltr\">table_name</code> equals <code translate=\"no\" dir=\"ltr\">feed_info</code>.</li>\n        <li>Forbidden if <code translate=\"no\" dir=\"ltr\">record_id</code> is defined.</li>\n        <li>Required if <code translate=\"no\" dir=\"ltr\">record_id</code> is empty.</li>\n      </ul>\n    "
+      }
+    ]
+  },
+  {
+    "fileName": "attributions",
+    "description": "<a href=\"https://developers.google.com/transit/gtfs/reference#attributionstxt\">attributions</a><br/><br/>File: <strong>Optional</strong>",
+    "properties": [
+      {
+        "fieldName": "attribution_id",
+        "type": "ID",
+        "required": false,
+        "description": "Identifies an attribution for the dataset, or a subset of it. This field is useful for translations."
+      },
+      {
+        "fieldName": "agency_id",
+        "type": "ID referencing",
+        "required": false,
+        "description": "The agency to which the attribution applies. If one <code translate=\"no\" dir=\"ltr\">agency_<wbr>id</code>, <code translate=\"no\" dir=\"ltr\">route_<wbr>id</code>, or <code translate=\"no\" dir=\"ltr\">trip_<wbr>id</code> attribution is defined, the other fields must be empty. If none are specified, the attribution applies to the whole dataset."
+      },
+      {
+        "fieldName": "route_id",
+        "type": "ID referencing",
+        "required": false,
+        "description": "This field functions in the same way as <code translate=\"no\" dir=\"ltr\">agency_<wbr>id</code>, except the attribution applies to a route. Multiple attributions can apply to the same route."
+      },
+      {
+        "fieldName": "trip_id",
+        "type": "ID referencing",
+        "required": false,
+        "description": "This field functions in the same way as <code translate=\"no\" dir=\"ltr\">agency_<wbr>id</code>, except the attribution applies to a trip. Multiple attributions can apply to the same trip."
+      },
+      {
+        "fieldName": "organization_name",
+        "type": "Text",
+        "required": true,
+        "description": "The name of the organization that the dataset is attributed to."
+      },
+      {
+        "fieldName": "is_producer",
+        "type": "Enum",
+        "required": false,
+        "description": "The role of the organization is producer. Allowed values include the following:<br>• <code translate=\"no\" dir=\"ltr\">0</code> or empty: Organization doesn’t have this role.<br>• <code translate=\"no\" dir=\"ltr\">1</code>: Organization does have this role.<br> At least one of the fields, either <code translate=\"no\" dir=\"ltr\">is_<wbr>producer</code>, <code translate=\"no\" dir=\"ltr\">is_<wbr>operator</code>, or <code translate=\"no\" dir=\"ltr\">is_<wbr>authority</code>, must be set at <code translate=\"no\" dir=\"ltr\">1</code>."
+      },
+      {
+        "fieldName": "is_operator",
+        "type": "Enum",
+        "required": false,
+        "description": "Functions in the same way as <code translate=\"no\" dir=\"ltr\">is_<wbr>producer</code>, except the role of the organization is operator."
+      },
+      {
+        "fieldName": "is_authority",
+        "type": "Enum",
+        "required": false,
+        "description": "Functions in the same way as <code translate=\"no\" dir=\"ltr\">is_<wbr>producer</code>, except the role of the organization is authority."
+      },
+      {
+        "fieldName": "attribution_url",
+        "type": "URL",
+        "required": false,
+        "description": "The URL of the organization."
+      },
+      {
+        "fieldName": "attribution_email",
+        "type": "Email",
+        "required": false,
+        "description": "The email of the organization."
+      },
+      {
+        "fieldName": "attribution_phone",
+        "type": "Phone number",
+        "required": false,
+        "description": "The phone number of the organization."
+      }
+    ]
+  }
+]
