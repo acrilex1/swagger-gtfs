@@ -2,6 +2,7 @@ import * as fs from "fs";
 // @ts-ignore
 import { write } from "node-yaml";
 import TurndownService from "turndown";
+import pluralize from "pluralize";
 
 interface Asset {
   fileName: string;
@@ -113,16 +114,51 @@ class Parser {
         "x-faker": "address.longitude",
         example: 12.492269,
       },
-      PhoneNumber: {
-        type: "string",
-        format: "phone",
-        "x-faker": "phone.phoneNumber",
-      },
       MultiDayTime: {
         type: "string",
         format: 'Time from "noon minus 12h", 24h+ format',
         pattern: "^\\d{2}:[0-5][0-9]$",
         example: "25:35:00",
+      },
+      NonNegativeFloat: {
+        minimum: 0,
+        type: "number",
+        format: "float",
+      },
+      NonNegativeInteger: {
+        type: "integer",
+        minimum: 0,
+      },
+      NonNullInteger: {
+        oneOf: [
+          {
+            type: "integer",
+            minimum: 1,
+          },
+          {
+            type: "integer",
+            minimum: -1,
+          },
+        ],
+      },
+      PhoneNumber: {
+        type: "string",
+        format: "phone",
+        "x-faker": "phone.phoneNumber",
+      },
+      PositiveFloat: {
+        minimum: 1,
+        type: "number",
+        format: "float",
+      },
+      PositiveInteger: {
+        type: "integer",
+        minimum: 1,
+      },
+      Text: {
+        description: "Human-readable text",
+        type: "string",
+        "x-faker": "lorem.paragraph",
       },
       Timezone: {
         type: "string",
@@ -135,11 +171,6 @@ class Parser {
         format: "url",
         "x-faker": "internet.url",
       },
-      Text: {
-        description: "Human-readable text",
-        type: "string",
-        "x-faker": "lorem.paragraph",
-      },
     };
 
     this.assets = JSON.parse(json);
@@ -149,7 +180,9 @@ class Parser {
         formattedProperties[property.fieldName] = this.parseProperty(property);
       });
 
-      formattedAssets[asset.fileName.snakeToCamel().capitalize()] = {
+      formattedAssets[
+        pluralize.singular(asset.fileName.snakeToCamel().capitalize())
+      ] = {
         type: "object",
         required: asset.properties
           .filter((property) => property.required)
@@ -162,91 +195,72 @@ class Parser {
   }
 
   private parseProperty(property: Asset["properties"]["0"]): OpenAPIProperty {
-    const result: OpenAPIProperty = {};
-
     // Removes referencing
     if (/.*ID.*/.test(property.type)) {
       property.type = "ID";
     }
 
-    switch (
-      property.type.toLowerCase() // Doc is inconsistent for uppercase/lowercase
-    ) {
-      case "color":
-        result.$ref = "#/Color";
-        break;
-      case "currency code":
-        result.$ref = "#/CurrencyCode";
-        break;
-      case "date":
-        result.$ref = "#/Date";
-        break;
-      case "email":
-        result.$ref = "#/Email";
-        break;
-      case "enum":
-        result.type = "string";
-        break;
-      case "id":
-        result.type = "string";
-        break;
-      case "language code":
-        result.$ref = "#/LanguageCode";
-        break;
-      case "latitude":
-        result.$ref = "#/Latitude";
-        break;
-      case "longitude":
-        result.$ref = "#/Longitude";
-        break;
-      case "positive float":
-        result.minimum = 1;
-      case "non-negative float":
-        result.minimum = 0;
-      case "float":
-        result.type = "number";
-        result.format = "float";
-        break;
-      case "positive integer":
-        result.type = "integer";
-        result.minimum = 1;
-      case "non-negative integer":
-        result.type = "integer";
-        result.minimum = 0;
-        break;
-      case "non-null integer":
-        result.oneOf = [
-          {
-            type: "integer",
-            minimum: 1,
-          },
-          {
-            type: "integer",
-            minimum: -1,
-          },
-        ];
-        break;
-      case "integer":
-        result.type = "integer";
-        break;
-      case "phone number":
-        result.$ref = "#/PhoneNumber";
-        break;
-      case "time":
-        result.$ref = "#/MultiDayTime";
+    const typesMapping: { [index: string]: OpenAPIProperty } = {
+      color: { $ref: "#/Color" },
+      "currency code": { $ref: "#/CurrencyCode" },
+      date: { $ref: "#/Date" },
+      email: { $ref: "#/Email" },
+      enum: {
+        type: "string",
+        enum: [],
+      },
+      id: {
+        type: "string",
+      },
+      "language code": {
+        $ref: "#/LanguageCode",
+      },
 
-        break;
-      case "text":
-        result.$ref = "#/Text";
-        break;
-      case "timezone":
-        result.$ref = "#/Timezone";
-        break;
-      case "url":
-        result.$ref = "#/URL";
-        break;
-      case "text, url, email, or phone number":
-        result.oneOf = [
+      latitude: {
+        $ref: "#/Latitude",
+      },
+      longitude: {
+        $ref: "#/Longitude",
+      },
+      "positive float": {
+        $ref: "#/PositiveFloat",
+      },
+      "non-negative float": {
+        $ref: "#/NonNegativeFloat",
+      },
+      float: {
+        type: "number",
+        format: "float",
+      },
+      "positive integer": {
+        $ref: "#/PositiveInteger",
+      },
+      "non-negative integer": {
+        $ref: "#/NonNegativeInteger",
+      },
+      "non-null integer": {
+        $ref: "#/NonNullInteger",
+      },
+      integer: {
+        type: "integer",
+      },
+      "phone number": {
+        $ref: "#/PhoneNumber",
+      },
+      time: {
+        $ref: "#/MultiDayTime",
+      },
+      text: {
+        $ref: "#/Text",
+      },
+      timezone: {
+        $ref: "#/Timezone",
+      },
+      url: {
+        $ref: "#/URL",
+      },
+      "text, url, email, or phone number": {
+        oneOf: [
           {
             $ref: "#/Text",
           },
@@ -260,10 +274,14 @@ class Parser {
           {
             $ref: "#/PhoneNumber",
           },
-        ];
-        break;
-      default:
-        throw new Error(`Invalid format ${property.type}`);
+        ],
+      },
+    };
+
+    const result: OpenAPIProperty = typesMapping[property.type.toLowerCase()]; // Doc is inconsistent for uppercase/lowercase
+
+    if (!result) {
+      throw new Error(`Invalid format ${property.type}`);
     }
 
     // Parse the description into Markdown
