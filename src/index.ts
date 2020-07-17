@@ -25,19 +25,19 @@ interface OpenAPIProperty {
   enum?: string[];
   pattern?: string;
   description?: string;
+  example?: string | number | (string | number)[];
   oneOf?: OpenAPIProperty[];
   allOf?: OpenAPIProperty[];
+  required?: string[];
+  properties?: {
+    [propertyName: string]: OpenAPIProperty;
+  };
+  // Additionnal properties for mock server
+  "x-faker"?: string;
 }
 
 interface OpenAPIObject {
-  [assetName: string]: {
-    description?: string;
-    type: string;
-    required: string[];
-    properties: {
-      [propertyName: string]: OpenAPIProperty;
-    };
-  };
+  [assetName: string]: OpenAPIProperty;
 }
 
 // Helper functions for string
@@ -67,7 +67,80 @@ class Parser {
   public async parse() {
     const json = fs.readFileSync("src/documentation.json").toString();
 
-    const formattedAssets: OpenAPIObject = {};
+    const formattedAssets: OpenAPIObject = {
+      Color: {
+        type: "string",
+        format: "hex",
+        pattern: "/^[A-F0-9]{6}$/",
+        example: "FFFFFF",
+      },
+      CurrencyCode: {
+        type: "string",
+        format: "ISO 4217",
+        "x-faker": "finance.currencyCode",
+        example: "CAD",
+      },
+      Date: {
+        type: "string",
+        format: "date",
+        example: "20180913",
+      },
+      Email: {
+        type: "string",
+        format: "email",
+        "x-faker": "internet.exampleEmail",
+        example: "example@example.com",
+      },
+      LanguageCode: {
+        type: "string",
+        format: "IETF BCP 47",
+        "x-faker": "random.locale",
+        example: "en-US",
+      },
+      Latitude: {
+        type: "number",
+        format: "double",
+        minimum: -90.0,
+        maximum: 90.0,
+        "x-faker": "address.latitude",
+        example: 41.890169,
+      },
+      Longitude: {
+        type: "number",
+        format: "double",
+        minimum: -180.0,
+        maximum: 180.0,
+        "x-faker": "address.longitude",
+        example: 12.492269,
+      },
+      PhoneNumber: {
+        type: "string",
+        format: "phone",
+        "x-faker": "phone.phoneNumber",
+      },
+      MultiDayTime: {
+        type: "string",
+        format: 'Time from "noon minus 12h", 24h+ format',
+        pattern: "^\\d{2}:[0-5][0-9]$",
+        example: "25:35:00",
+      },
+      Timezone: {
+        type: "string",
+        format: "tz",
+        pattern: "^[w/]*$",
+        example: "America/Los_Angeles",
+      },
+      URL: {
+        type: "string",
+        format: "url",
+        "x-faker": "internet.url",
+      },
+      Text: {
+        description: "Human-readable text",
+        type: "string",
+        "x-faker": "lorem.paragraph",
+      },
+    };
 
     this.assets = JSON.parse(json);
     this.assets.forEach((asset) => {
@@ -100,43 +173,31 @@ class Parser {
       property.type.toLowerCase() // Doc is inconsistent for uppercase/lowercase
     ) {
       case "color":
-        result.type = "string";
-        result.format = "hex";
+        result.$ref = "#/Color";
         break;
       case "currency code":
-        result.type = "string";
-        result.format = "ISO 4217";
+        result.$ref = "#/CurrencyCode";
         break;
       case "date":
-        result.type = "string";
-        result.format = "date";
+        result.$ref = "#/Date";
         break;
       case "email":
-        result.type = "string";
-        result.format = "email";
+        result.$ref = "#/Email";
         break;
       case "enum":
         result.type = "string";
-        result.enum = [];
         break;
       case "id":
         result.type = "string";
         break;
       case "language code":
-        result.type = "string";
-        result.format = "IETF BCP 47";
+        result.$ref = "#/LanguageCode";
         break;
       case "latitude":
-        result.type = "number";
-        result.format = "double";
-        result.minimum = -90.0;
-        result.maximum = 90.0;
+        result.$ref = "#/Latitude";
         break;
       case "longitude":
-        result.type = "number";
-        result.format = "double";
-        result.minimum = -180.0;
-        result.maximum = 180.0;
+        result.$ref = "#/Longitude";
         break;
       case "positive float":
         result.minimum = 1;
@@ -153,49 +214,51 @@ class Parser {
         result.type = "integer";
         result.minimum = 0;
         break;
-      case "non-null integer": // No way in swagger to prohibit 0
-        result.format = "non-zero";
+      case "non-null integer":
+        result.oneOf = [
+          {
+            type: "integer",
+            minimum: 1,
+          },
+          {
+            type: "integer",
+            minimum: -1,
+          },
+        ];
+        break;
       case "integer":
         result.type = "integer";
         break;
       case "phone number":
-        result.type = "string";
-        result.format = "phone";
+        result.$ref = "#/PhoneNumber";
         break;
       case "time":
-        result.type = "string";
-        result.format = 'Time from "noon minus 12h", 24h+ format';
-        result.pattern = "^\\d{1,2}:\\d{2}:\\d{2}$";
+        result.$ref = "#/MultiDayTime";
+
         break;
       case "text":
-        result.type = "string";
+        result.$ref = "#/Text";
         break;
       case "timezone":
-        result.type = "string";
-        result.format = "tz";
-        result.pattern = "^[w/]*$";
+        result.$ref = "#/Timezone";
         break;
       case "url":
-        result.type = "string";
-        result.format = "url";
+        result.$ref = "#/URL";
         break;
       case "text, url, email, or phone number":
         result.oneOf = [
           {
-            type: "string",
+            $ref: "#/Text",
           },
           {
-            type: "string",
-            format: "url",
+            $ref: "#/URL",
           },
           {
-            type: "string",
-            format: "email",
+            $ref: "#/Email",
           },
 
           {
-            type: "string",
-            format: "phone",
+            $ref: "#/PhoneNumber",
           },
         ];
         break;
