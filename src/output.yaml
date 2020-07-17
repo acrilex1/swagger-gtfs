@@ -36,15 +36,39 @@ Longitude:
   maximum: 180
   x-faker: address.longitude
   example: 12.492269
-PhoneNumber:
-  type: string
-  format: phone
-  x-faker: phone.phoneNumber
 MultiDayTime:
   type: string
   format: 'Time from "noon minus 12h", 24h+ format'
   pattern: '^\d{2}:[0-5][0-9]$'
   example: '25:35:00'
+NonNegativeFloat:
+  minimum: 0
+  type: number
+  format: float
+NonNegativeInteger:
+  type: integer
+  minimum: 0
+NonNullInteger:
+  oneOf:
+    - type: integer
+      minimum: 1
+    - type: integer
+      minimum: -1
+PhoneNumber:
+  type: string
+  format: phone
+  x-faker: phone.phoneNumber
+PositiveFloat:
+  minimum: 1
+  type: number
+  format: float
+PositiveInteger:
+  type: integer
+  minimum: 1
+Text:
+  description: Human-readable text
+  type: string
+  x-faker: lorem.paragraph
 Timezone:
   type: string
   format: tz
@@ -54,10 +78,6 @@ URL:
   type: string
   format: url
   x-faker: internet.url
-Text:
-  description: Human-readable text
-  type: string
-  x-faker: lorem.paragraph
 Agency:
   type: object
   required:
@@ -113,7 +133,7 @@ Agency:
         department. This email address should be a direct contact point where
         transit riders can reach a customer service representative at the
         agency.
-Stops:
+Stop:
   type: object
   required:
     - stop_id
@@ -198,6 +218,7 @@ Stops:
         `agency.agency_url` and the `routes.route_url` field values.
     location_type:
       type: string
+      enum: []
       description: >-
         Type of the location:  
 
@@ -261,6 +282,7 @@ Stops:
         the trip crosses.
     wheelchair_boarding:
       type: string
+      enum: []
       description: >-
         Indicates whether wheelchair boardings are possible from the location.
         Valid options are:  
@@ -307,7 +329,7 @@ Stops:
         should not be included. This allows feed consumers to more easily
         internationalize and localize the platform identifier into other
         languages.
-Routes:
+Route:
   type: object
   required:
     - route_id
@@ -355,6 +377,7 @@ Routes:
         Far Rockaway)._
     route_type:
       type: string
+      enum: []
       description: >-
         Indicates the type of transportation used on a route. Valid options
         are:  
@@ -405,13 +428,13 @@ Routes:
         The color difference between `route_color` and `route_text_color` should
         provide sufficient contrast when viewed on a black and white screen.
     route_sort_order:
-      type: integer
-      minimum: 0
+      $ref: '#/NonNegativeInteger'
       description: >-
         Orders the routes in a way which is ideal for presentation to customers.
         Routes with smaller `route_sort_order` values should be displayed first.
     continuous_pickup:
       type: string
+      enum: []
       description: >-
         Indicates whether a rider can board the transit vehicle anywhere along
         the vehicle’s travel path. The path is described by
@@ -432,6 +455,7 @@ Routes:
         [`stop_times.txt`](https://developers.google.com/transit/gtfs/reference#stop_timestxt).
     continuous_drop_off:
       type: string
+      enum: []
       description: >-
         Indicates whether a rider can alight from the transit vehicle at any
         point along the vehicle’s travel path. The path is described by
@@ -448,7 +472,7 @@ Routes:
           
         The default continuous drop-off behavior defined in `routes.txt` can be
         overridden in `stop_times.txt`.
-Trips:
+Trip:
   type: object
   required:
     - route_id
@@ -485,6 +509,7 @@ Trips:
         designations.
     direction_id:
       type: string
+      enum: []
       description: >-
         Indicates the direction of travel for a trip. This field is not used in
         routing; it provides a way to separate trips by direction when
@@ -532,6 +557,7 @@ Trips:
         Otherwise, it's optional.
     wheelchair_accessible:
       type: string
+      enum: []
       description: >-
         Indicates wheelchair accessibility. Valid options are:  
           
@@ -543,6 +569,7 @@ Trips:
         `2` - No riders in wheelchairs can be accommodated on this trip.
     bikes_allowed:
       type: string
+      enum: []
       description: >-
         Indicates whether bikes are allowed. Valid options are:  
           
@@ -552,7 +579,7 @@ Trips:
         least one bicycle.  
 
         `2` - No bicycles are allowed on this trip.
-StopTimes:
+StopTime:
   type: object
   required:
     - trip_id
@@ -606,8 +633,7 @@ StopTimes:
         stop may be serviced multiple times in the same trip, and multiple trips
         and routes may service the same stop.
     stop_sequence:
-      type: integer
-      minimum: 0
+      $ref: '#/NonNegativeInteger'
       description: >-
         Order of stops for a particular trip. The values must increase along the
         trip but do not need to be consecutive.
@@ -634,6 +660,7 @@ StopTimes:
         `stop_headsign` value must be repeated in each `stop_time` row.
     pickup_type:
       type: string
+      enum: []
       description: |-
         Indicates pickup method. Valid options are:  
           
@@ -643,6 +670,7 @@ StopTimes:
         `3` - Must coordinate with driver to arrange pickup.
     drop_off_type:
       type: string
+      enum: []
       description: |-
         Indicates drop off method. Valid options are:  
           
@@ -652,6 +680,7 @@ StopTimes:
         `3` - Must coordinate with driver to arrange drop off.
     continuous_pickup:
       type: string
+      enum: []
       description: >-
         Indicates whether a rider can board the transit vehicle at any point
         along the vehicle’s travel path. The path is described by `shapes.txt`,
@@ -671,6 +700,7 @@ StopTimes:
         any behavior defined in `routes.txt`.
     continuous_drop_off:
       type: string
+      enum: []
       description: >-
         Indicates whether a rider can alight from the transit vehicle at any
         point along the vehicle’s travel path as described by `shapes.txt`, from
@@ -689,9 +719,7 @@ StopTimes:
         The continuous drop-off behavior indicated in `stop_times.txt` overrides
         any behavior defined in `routes.txt`.
     shape_dist_traveled:
-      minimum: 0
-      type: number
-      format: float
+      $ref: '#/NonNegativeFloat'
       description: >-
         Actual distance traveled along the associated shape, from the first stop
         to the stop specified in this record. This field specifies how much of
@@ -710,6 +738,7 @@ StopTimes:
         of the shape to the stop,`shape_dist_traveled`\=`5.25`._
     timepoint:
       type: string
+      enum: []
       description: >-
         Indicates if arrival and departure times for a stop are strictly adhered
         to by the vehicle or if they are instead approximate and/or interpolated
@@ -743,6 +772,7 @@ Calendar:
         file.
     monday:
       type: string
+      enum: []
       description: >-
         Indicates whether the service operates on all Mondays in the date range
         specified by the `start_date` and `end_date` fields. Note that
@@ -755,21 +785,27 @@ Calendar:
         `0` - Service is not available for Mondays in the date range.
     tuesday:
       type: string
+      enum: []
       description: Functions in the same way as `monday` except applies to Tuesdays
     wednesday:
       type: string
+      enum: []
       description: Functions in the same way as `monday` except applies to Wednesdays
     thursday:
       type: string
+      enum: []
       description: Functions in the same way as `monday` except applies to Thursdays
     friday:
       type: string
+      enum: []
       description: Functions in the same way as `monday` except applies to Fridays
     saturday:
       type: string
+      enum: []
       description: Functions in the same way as `monday` except applies to Saturdays.
     sunday:
       type: string
+      enum: []
       description: Functions in the same way as `monday` except applies to Sundays.
     start_date:
       $ref: '#/Date'
@@ -779,7 +815,7 @@ Calendar:
       description: >-
         End service day for the service interval. This service day is included
         in the interval.
-CalendarDates:
+CalendarDate:
   type: object
   required:
     - service_id
@@ -809,6 +845,7 @@ CalendarDates:
       description: Date when service exception occurs.
     exception_type:
       type: string
+      enum: []
       description: >-
         Indicates whether service is available on the date specified in the date
         field. Valid options are:  
@@ -828,7 +865,7 @@ CalendarDates:
         [calendar\_dates.txt](https://developers.google.com/transit/gtfs/reference#calendar_datestxt)
         file could be used to add the holiday to the holiday `service_id` and to
         remove the holiday from the regular `service_id` schedule._
-FareAttributes:
+FareAttribute:
   type: object
   required:
     - fare_id
@@ -841,15 +878,14 @@ FareAttributes:
       type: string
       description: Identifies a fare class.
     price:
-      minimum: 0
-      type: number
-      format: float
+      $ref: '#/NonNegativeFloat'
       description: 'Fare price, in the unit specified by `currency_type`.'
     currency_type:
       $ref: '#/CurrencyCode'
       description: Currency used to pay the fare.
     payment_method:
       type: string
+      enum: []
       description: |-
         Indicates when the fare must be paid. Valid options are:  
           
@@ -857,6 +893,7 @@ FareAttributes:
         `1` - Fare must be paid before boarding.
     transfers:
       type: string
+      enum: []
       description: >-
         Indicates the number of transfers permitted on this fare. The fact that
         this field can be left empty is an exception to the requirement that a
@@ -877,13 +914,12 @@ FareAttributes:
         [agency.txt](https://developers.google.com/transit/gtfs/reference#agencytxt),
         otherwise it is optional.
     transfer_duration:
-      type: integer
-      minimum: 0
+      $ref: '#/NonNegativeInteger'
       description: >-
         Length of time in seconds before a transfer expires. When
         `transfers`\=`0` this field can be used to indicate how long a ticket is
         valid for or it can can be left empty.
-FareRules:
+FareRule:
   type: object
   required:
     - fare_id
@@ -985,7 +1021,7 @@ FareRules:
         have fare class "c". For more detail, see
         [https://code.google.com/p/googletransitdatafeed/wiki/FareExamples](https://code.google.com/p/googletransitdatafeed/wiki/FareExamples)
         in the GoogleTransitDataFeed project wiki._
-Shapes:
+Shape:
   type: object
   required:
     - shape_id
@@ -1006,8 +1042,7 @@ Shapes:
       $ref: '#/Longitude'
       description: Longitude of a shape point.
     shape_pt_sequence:
-      type: integer
-      minimum: 0
+      $ref: '#/NonNegativeInteger'
       description: >-
         Sequence in which the shape points connect to form the shape. Values
         must increase along the trip but do not need to be consecutive.
@@ -1028,9 +1063,7 @@ Shapes:
 
         `A_shp,37.65863,-122.30839,11`
     shape_dist_traveled:
-      minimum: 0
-      type: number
-      format: float
+      $ref: '#/NonNegativeFloat'
       description: >-
         Actual distance traveled along the shape from the first shape point to
         the point specified in this record. Used by trip planners to show the
@@ -1054,7 +1087,7 @@ Shapes:
         `A_shp,37.64430,-122.41070,6,6.8310`  
 
         `A_shp,37.65863,-122.30839,11,15.8765`
-Frequencies:
+Frequency:
   type: object
   required:
     - trip_id
@@ -1076,8 +1109,7 @@ Frequencies:
         Time at which service changes to a different headway (or ceases) at the
         first stop in the trip.
     headway_secs:
-      type: integer
-      minimum: 0
+      $ref: '#/NonNegativeInteger'
       description: >-
         Time, in seconds, between departures from the same stop (headway) for
         the trip, during the time interval specified by `start_time` and
@@ -1086,6 +1118,7 @@ Frequencies:
         ends.
     exact_times:
       type: string
+      enum: []
       description: >-
         Indicates the type of service for a trip. See the file description for
         more information. Valid options are:  
@@ -1096,7 +1129,7 @@ Frequencies:
         day. In this case the `end_time` value must be greater than the last
         desired trip `start_time` but less than the last desired trip
         start\_time + `headway_secs`.
-Transfers:
+Transfer:
   type: object
   required:
     - from_stop_id
@@ -1117,6 +1150,7 @@ Transfers:
         stops.
     transfer_type:
       type: string
+      enum: []
       description: >-
         Indicates the type of connection for the specified (`from_stop_id`,
         `to_stop_id`) pair. Valid options are:  
@@ -1133,14 +1167,13 @@ Transfers:
 
         `3` - Transfers are not possible between routes at the location.
     min_transfer_time:
-      type: integer
-      minimum: 0
+      $ref: '#/NonNegativeInteger'
       description: >-
         Amount of time, in seconds, that must be available to permit a transfer
         between routes at the specified stops. The `min_transfer_time` should be
         sufficient to permit a typical rider to move between the two stops,
         including buffer time to allow for schedule variance on each route.
-Pathways:
+Pathway:
   type: object
   required:
     - pathway_id
@@ -1175,6 +1208,7 @@ Pathways:
         the `stops.txt` file.
     pathway_mode:
       type: string
+      enum: []
       description: >-
         Type of pathway between the specified (`from_stop_id`, `to_stop_id`)
         pair. Valid values for this field are:  
@@ -1205,6 +1239,7 @@ Pathways:
         longer required.
     is_bidirectional:
       type: string
+      enum: []
       description: >-
         Indicates in which direction the pathway can be used:  
 
@@ -1216,9 +1251,7 @@ Pathways:
         Fare gates (`pathway_mode=6`) and exit gates (`pathway_mode=7`) cannot
         be bidirectional.
     length:
-      minimum: 0
-      type: number
-      format: float
+      $ref: '#/NonNegativeFloat'
       description: >-
         Horizontal length in meters of the pathway from the origin location
         (defined in `from_stop_id`) to the destination location (defined in
@@ -1227,8 +1260,7 @@ Pathways:
         This field is recommended for walkways (`pathway_mode=1`), fare gates
         (`pathway_mode=6`) and exit gates (`pathway_mode=7`).
     traversal_time:
-      type: integer
-      minimum: 0
+      $ref: '#/PositiveInteger'
       description: >-
         Average time in seconds needed to walk through the pathway from the
         origin location (defined in `from_stop_id`) to the destination location
@@ -1237,11 +1269,7 @@ Pathways:
         This field is recommended for moving sidewalks (`pathway_mode=3`),
         escalators (`pathway_mode=4`) and elevator (`pathway_mode=5`).
     stair_count:
-      oneOf:
-        - type: integer
-          minimum: 1
-        - type: integer
-          minimum: -1
+      $ref: '#/NonNullInteger'
       description: >-
         Number of stairs of the pathway.  
           
@@ -1271,9 +1299,7 @@ Pathways:
         for hand-propelled wheelchair, which mean an increase of 0.083m (so
         8.3cm) for each 1m.
     min_width:
-      minimum: 0
-      type: number
-      format: float
+      $ref: '#/PositiveFloat'
       description: >-
         Minimum width of the pathway in meters.  
           
@@ -1291,7 +1317,7 @@ Pathways:
       description: >-
         Same than the `signposted_as` field, but when the pathways is used
         backward, i.e. from the `to_stop_id` to the `from_stop_id`.
-Levels:
+Level:
   type: object
   required:
     - level_id
@@ -1417,7 +1443,7 @@ FeedInfo:
         practices. `feed_contact_url` is a technical contact for GTFS-consuming
         applications. Provide customer service contact information through
         [agency.txt](https://developers.google.com/transit/gtfs/reference#agencytxt).
-Translations:
+Translation:
   type: object
   required:
     - table_name
@@ -1427,6 +1453,7 @@ Translations:
   properties:
     table_name:
       type: string
+      enum: []
       description: >-
         Defines the dataset table that contains the field to be translated. The
         following values are allowed:
@@ -1659,7 +1686,7 @@ Translations:
         *   Forbidden if `record_id` is defined.
 
         *   Required if `record_id` is empty.
-Attributions:
+Attribution:
   type: object
   required:
     - organization_name
@@ -1693,6 +1720,7 @@ Attributions:
       description: The name of the organization that the dataset is attributed to.
     is_producer:
       type: string
+      enum: []
       description: >-
         The role of the organization is producer. Allowed values include the
         following:  
@@ -1705,11 +1733,13 @@ Attributions:
         `is_authority`, must be set at `1`.
     is_operator:
       type: string
+      enum: []
       description: >-
         Functions in the same way as `is_producer`, except the role of the
         organization is operator.
     is_authority:
       type: string
+      enum: []
       description: >-
         Functions in the same way as `is_producer`, except the role of the
         organization is authority.
