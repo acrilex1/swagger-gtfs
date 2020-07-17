@@ -1,7 +1,7 @@
 Color:
   type: string
   format: hex
-  pattern: '/^[A-F0-9]{6}$/'
+  pattern: "/^[A-F0-9]{6}$/"
   example: FFFFFF
 CurrencyCode:
   type: string
@@ -11,7 +11,7 @@ CurrencyCode:
 Date:
   type: string
   format: date
-  example: '20180913'
+  example: "20180913"
 Email:
   type: string
   format: email
@@ -40,7 +40,7 @@ MultiDayTime:
   type: string
   format: 'Time from "noon minus 12h", 24h+ format'
   pattern: '^\d{2}:[0-5][0-9]$'
-  example: '25:35:00'
+  example: "25:35:00"
 NonNegativeFloat:
   minimum: 0
   type: number
@@ -72,12 +72,42 @@ Text:
 Timezone:
   type: string
   format: tz
-  pattern: '^[w/]*$'
+  pattern: "^[w/]*$"
   example: America/Los_Angeles
 URL:
   type: string
   format: url
   x-faker: internet.url
+CalendarDay:
+  type: string
+  enum:
+    - "0"
+    - "1"
+  description: >-
+    DOW: Single Day of the week (monday, tuesday, etc.)
+
+    Indicates whether the service operates on all DOW in the date range
+    specified by the `start_date` and `end_date` fields. Note that
+    exceptions for particular dates may be listed in
+    [calendar\_dates.txt](https://developers.google.com/transit/gtfs/reference#calendar_datestxt).
+    Valid options are:  
+      
+    `1` - Service is available for all DOW in the date range.  
+
+    `0` - Service is not available for DOW in the date range.
+OrganizationHasRole:
+  type: string
+  enum:
+    - null
+    - "0"
+    - "1"
+  description: >-
+    The organization has this role. Allowed values include the
+    following:  
+
+    • `0` or empty: Organization doesn’t have this role.  
+
+    • `1`: Organization does have this role.
 Agency:
   type: object
   required:
@@ -96,24 +126,24 @@ Agency:
         dataset contains data for multiple transit agencies, otherwise it is
         optional.
     agency_name:
-      $ref: '#/Text'
+      $ref: "#/Text"
       description: Full name of the transit agency.
     agency_url:
-      $ref: '#/URL'
+      $ref: "#/URL"
       description: URL of the transit agency.
     agency_timezone:
-      $ref: '#/Timezone'
+      $ref: "#/Timezone"
       description: >-
         Timezone where the transit agency is located. If multiple agencies are
         specified in the dataset, each must have the same `agency_timezone`.
     agency_lang:
-      $ref: '#/LanguageCode'
+      $ref: "#/LanguageCode"
       description: >-
         Primary language used by this transit agency. This field helps GTFS
         consumers choose capitalization rules and other language-specific
         settings for the dataset.
     agency_phone:
-      $ref: '#/PhoneNumber'
+      $ref: "#/PhoneNumber"
       description: >-
         A voice telephone number for the specified agency. This field is a
         string value that presents the telephone number as typical for the
@@ -122,12 +152,12 @@ Agency:
         "503-238-RIDE") is permitted, but the field must not contain any other
         descriptive text.
     agency_fare_url:
-      $ref: '#/URL'
+      $ref: "#/URL"
       description: >-
         URL of a web page that allows a rider to purchase tickets or other fare
         instruments for that agency online.
     agency_email:
-      $ref: '#/Email'
+      $ref: "#/Email"
       description: >-
         Email address actively monitored by the agency’s customer service
         department. This email address should be a direct contact point where
@@ -147,7 +177,7 @@ Stop:
         exits. Stops, stations or station entrances are collectively referred to
         as locations. Multiple routes may use the same stop.
     stop_code:
-      $ref: '#/Text'
+      $ref: "#/Text"
       description: >-
         Short text or a number that identifies the location for riders. These
         codes are often used in phone-based transit information systems or
@@ -156,7 +186,7 @@ Stop:
         is public facing. This field should be left empty for locations without
         a code presented to riders.
     stop_name:
-      $ref: '#/Text'
+      $ref: "#/Text"
       description: >-
         Name of the location. Use a name that people will understand in the
         local and tourist vernacular.  
@@ -175,12 +205,12 @@ Stop:
         • Optional for locations which are generic nodes (`location_type=3`) or
         boarding areas (`location_type=4`).
     stop_desc:
-      $ref: '#/Text'
+      $ref: "#/Text"
       description: >-
         Description of the location that provides useful, quality information.
         Do not simply duplicate the name of the location.
     stop_lat:
-      $ref: '#/Latitude'
+      $ref: "#/Latitude"
       description: >-
         Latitude of the location.  
           
@@ -192,7 +222,7 @@ Stop:
         • Optional for locations which are generic nodes (`location_type=3`) or
         boarding areas (`location_type=4`).
     stop_lon:
-      $ref: '#/Longitude'
+      $ref: "#/Longitude"
       description: >-
         Longitude of the location.  
           
@@ -212,13 +242,19 @@ Stop:
         otherwise it is optional. If this record represents a station or station
         entrance, the `zone_id` is ignored.
     stop_url:
-      $ref: '#/URL'
+      $ref: "#/URL"
       description: >-
         URL of a web page about the location. This should be different from the
         `agency.agency_url` and the `routes.route_url` field values.
     location_type:
       type: string
-      enum: []
+      enum:
+        - null
+        - "0"
+        - "1"
+        - "2"
+        - "3"
+        - "4"
       description: >-
         Type of the location:  
 
@@ -268,7 +304,7 @@ Stop:
 
         • Forbidden for stations (`location_type=1`).
     stop_timezone:
-      $ref: '#/Timezone'
+      $ref: "#/Timezone"
       description: >-
         Timezone of the location. If the location has a parent station, it
         inherits the parent station’s timezone instead of applying its own.
@@ -282,7 +318,10 @@ Stop:
         the trip crosses.
     wheelchair_boarding:
       type: string
-      enum: []
+      enum:
+        - "0"
+        - "1"
+        - "2"
       description: >-
         Indicates whether wheelchair boardings are possible from the location.
         Valid options are:  
@@ -321,7 +360,7 @@ Stop:
         Level of the location. The same level can be used by multiple unlinked
         stations.
     platform_code:
-      $ref: '#/Text'
+      $ref: "#/Text"
       description: >-
         Platform identifier for a platform stop (a stop belonging to a station).
         This should be just the platform identifier (eg. "G" or "3"). Words like
@@ -346,7 +385,7 @@ Route:
         [agency.txt](https://developers.google.com/transit/gtfs/reference#agencytxt),
         otherwise it is optional.
     route_short_name:
-      $ref: '#/Text'
+      $ref: "#/Text"
       description: >-
         Short name of a route. This will often be a short, abstract identifier
         like "32", "100X", or "Green" that riders use to identify a route, but
@@ -354,14 +393,14 @@ Route:
         Either `route_short_name` or `route_long_name` must be specified, or
         potentially both if appropriate.
     route_long_name:
-      $ref: '#/Text'
+      $ref: "#/Text"
       description: >-
         Full name of a route. This name is generally more descriptive than the
         `route_short_name` and often includes the route's destination or stop.
         Either `route_short_name` or `route_long_name` must be specified, or
         potentially both if appropriate.
     route_desc:
-      $ref: '#/Text'
+      $ref: "#/Text"
       description: >-
         Description of a route that provides useful, quality information. Do not
         simply duplicate the name of the route.
@@ -377,7 +416,16 @@ Route:
         Far Rockaway)._
     route_type:
       type: string
-      enum: []
+      enum:
+        - "0"
+        - "1"
+        - "3"
+        - "4"
+        - "5"
+        - "6"
+        - "7"
+        - "11"
+        - "12"
       description: >-
         Indicates the type of transportation used on a route. Valid options
         are:  
@@ -409,32 +457,36 @@ Route:
         `12` - Monorail. Railway in which the track consists of a single rail or
         a beam.
     route_url:
-      $ref: '#/URL'
+      $ref: "#/URL"
       description: >-
         URL of a web page about the particular route. Should be different from
         the `agency.agency_url` value.
     route_color:
-      $ref: '#/Color'
+      $ref: "#/Color"
       description: >-
         Route color designation that matches public facing material. Defaults to
         white (`FFFFFF`) when omitted or left empty. The color difference
         between `route_color` and `route_text_color` should provide sufficient
         contrast when viewed on a black and white screen.
     route_text_color:
-      $ref: '#/Color'
+      $ref: "#/Color"
       description: >-
         Legible color to use for text drawn against a background of
         `route_color`. Defaults to black (`000000`) when omitted or left empty.
         The color difference between `route_color` and `route_text_color` should
         provide sufficient contrast when viewed on a black and white screen.
     route_sort_order:
-      $ref: '#/NonNegativeInteger'
+      $ref: "#/NonNegativeInteger"
       description: >-
         Orders the routes in a way which is ideal for presentation to customers.
         Routes with smaller `route_sort_order` values should be displayed first.
     continuous_pickup:
       type: string
-      enum: []
+      enum:
+        - "0"
+        - "1"
+        - "2"
+        - "3"
       description: >-
         Indicates whether a rider can board the transit vehicle anywhere along
         the vehicle’s travel path. The path is described by
@@ -455,7 +507,11 @@ Route:
         [`stop_times.txt`](https://developers.google.com/transit/gtfs/reference#stop_timestxt).
     continuous_drop_off:
       type: string
-      enum: []
+      enum:
+        - "0"
+        - "1"
+        - "2"
+        - "3"
       description: >-
         Indicates whether a rider can alight from the transit vehicle at any
         point along the vehicle’s travel path. The path is described by
@@ -491,7 +547,7 @@ Trip:
       type: string
       description: Identifies a trip.
     trip_headsign:
-      $ref: '#/Text'
+      $ref: "#/Text"
       description: >-
         Text that appears on signage identifying the trip's destination to
         riders. Use this field to distinguish between different patterns of
@@ -499,7 +555,7 @@ Trip:
         `trip_headsign` can be overridden by specifying values for the
         `stop_times.stop_headsign`.
     trip_short_name:
-      $ref: '#/Text'
+      $ref: "#/Text"
       description: >-
         Public facing text used to identify the trip to riders, for instance, to
         identify train numbers for commuter rail trips. If riders do not
@@ -509,7 +565,9 @@ Trip:
         designations.
     direction_id:
       type: string
-      enum: []
+      enum:
+        - "0"
+        - "1"
       description: >-
         Indicates the direction of travel for a trip. This field is not used in
         routing; it provides a way to separate trips by direction when
@@ -557,7 +615,10 @@ Trip:
         Otherwise, it's optional.
     wheelchair_accessible:
       type: string
-      enum: []
+      enum:
+        - "0"
+        - "1"
+        - "2"
       description: >-
         Indicates wheelchair accessibility. Valid options are:  
           
@@ -569,7 +630,10 @@ Trip:
         `2` - No riders in wheelchairs can be accommodated on this trip.
     bikes_allowed:
       type: string
-      enum: []
+      enum:
+        - "0"
+        - "1"
+        - "2"
       description: >-
         Indicates whether bikes are allowed. Valid options are:  
           
@@ -590,7 +654,7 @@ StopTime:
       type: string
       description: Identifies a trip.
     arrival_time:
-      $ref: '#/MultiDayTime'
+      $ref: "#/MultiDayTime"
       description: >-
         Arrival time at a specific stop for a specific trip on a route. If there
         are not separate times for arrival and departure at a stop, enter the
@@ -610,7 +674,7 @@ StopTime:
         points. An arrival time must be specified for the first and the last
         stop in a trip.
     departure_time:
-      $ref: '#/MultiDayTime'
+      $ref: "#/MultiDayTime"
       description: >-
         Departure time from a specific stop for a specific trip on a route. For
         times occurring after midnight on the service day, enter the time as a
@@ -633,7 +697,7 @@ StopTime:
         stop may be serviced multiple times in the same trip, and multiple trips
         and routes may service the same stop.
     stop_sequence:
-      $ref: '#/NonNegativeInteger'
+      $ref: "#/NonNegativeInteger"
       description: >-
         Order of stops for a particular trip. The values must increase along the
         trip but do not need to be consecutive.
@@ -647,7 +711,7 @@ StopTime:
         `stop_sequence`\=`23`, the third location could have a
         `stop_sequence`\=`40`, and so on._
     stop_headsign:
-      $ref: '#/Text'
+      $ref: "#/Text"
       description: >-
         Text that appears on signage identifying the trip's destination to
         riders. This field overrides the default `trips.trip_headsign` when the
@@ -660,7 +724,11 @@ StopTime:
         `stop_headsign` value must be repeated in each `stop_time` row.
     pickup_type:
       type: string
-      enum: []
+      enum:
+        - "0"
+        - "1"
+        - "2"
+        - "3"
       description: |-
         Indicates pickup method. Valid options are:  
           
@@ -670,7 +738,11 @@ StopTime:
         `3` - Must coordinate with driver to arrange pickup.
     drop_off_type:
       type: string
-      enum: []
+      enum:
+        - "0"
+        - "1"
+        - "2"
+        - "3"
       description: |-
         Indicates drop off method. Valid options are:  
           
@@ -680,7 +752,11 @@ StopTime:
         `3` - Must coordinate with driver to arrange drop off.
     continuous_pickup:
       type: string
-      enum: []
+      enum:
+        - "0"
+        - "1"
+        - "2"
+        - "3"
       description: >-
         Indicates whether a rider can board the transit vehicle at any point
         along the vehicle’s travel path. The path is described by `shapes.txt`,
@@ -700,7 +776,11 @@ StopTime:
         any behavior defined in `routes.txt`.
     continuous_drop_off:
       type: string
-      enum: []
+      enum:
+        - "0"
+        - "1"
+        - "2"
+        - "3"
       description: >-
         Indicates whether a rider can alight from the transit vehicle at any
         point along the vehicle’s travel path as described by `shapes.txt`, from
@@ -719,7 +799,7 @@ StopTime:
         The continuous drop-off behavior indicated in `stop_times.txt` overrides
         any behavior defined in `routes.txt`.
     shape_dist_traveled:
-      $ref: '#/NonNegativeFloat'
+      $ref: "#/NonNegativeFloat"
       description: >-
         Actual distance traveled along the associated shape, from the first stop
         to the stop specified in this record. This field specifies how much of
@@ -738,7 +818,10 @@ StopTime:
         of the shape to the stop,`shape_dist_traveled`\=`5.25`._
     timepoint:
       type: string
-      enum: []
+      enum:
+        - null
+        - "0"
+        - "1"
       description: >-
         Indicates if arrival and departure times for a stop are strictly adhered
         to by the vehicle or if they are instead approximate and/or interpolated
@@ -771,47 +854,24 @@ Calendar:
         [calendar.txt](https://developers.google.com/transit/gtfs/reference#calendartxt)
         file.
     monday:
-      type: string
-      enum: []
-      description: >-
-        Indicates whether the service operates on all Mondays in the date range
-        specified by the `start_date` and `end_date` fields. Note that
-        exceptions for particular dates may be listed in
-        [calendar\_dates.txt](https://developers.google.com/transit/gtfs/reference#calendar_datestxt).
-        Valid options are:  
-          
-        `1` - Service is available for all Mondays in the date range.  
-
-        `0` - Service is not available for Mondays in the date range.
+      $ref: "#/CalendarDay"
     tuesday:
-      type: string
-      enum: []
-      description: Functions in the same way as `monday` except applies to Tuesdays
+      $ref: "#/CalendarDay"
     wednesday:
-      type: string
-      enum: []
-      description: Functions in the same way as `monday` except applies to Wednesdays
+      $ref: "#/CalendarDay"
     thursday:
-      type: string
-      enum: []
-      description: Functions in the same way as `monday` except applies to Thursdays
+      $ref: "#/CalendarDay"
     friday:
-      type: string
-      enum: []
-      description: Functions in the same way as `monday` except applies to Fridays
+      $ref: "#/CalendarDay"
     saturday:
-      type: string
-      enum: []
-      description: Functions in the same way as `monday` except applies to Saturdays.
+      $ref: "#/CalendarDay"
     sunday:
-      type: string
-      enum: []
-      description: Functions in the same way as `monday` except applies to Sundays.
+      $ref: "#/CalendarDay"
     start_date:
-      $ref: '#/Date'
+      $ref: "#/Date"
       description: Start service day for the service interval.
     end_date:
-      $ref: '#/Date'
+      $ref: "#/Date"
       description: >-
         End service day for the service interval. This service day is included
         in the interval.
@@ -841,11 +901,13 @@ CalendarDate:
         modifies the service information specified in
         [calendar.txt](https://developers.google.com/transit/gtfs/reference#calendartxt).
     date:
-      $ref: '#/Date'
+      $ref: "#/Date"
       description: Date when service exception occurs.
     exception_type:
       type: string
-      enum: []
+      enum:
+        - "1"
+        - "2"
       description: >-
         Indicates whether service is available on the date specified in the date
         field. Valid options are:  
@@ -878,14 +940,16 @@ FareAttribute:
       type: string
       description: Identifies a fare class.
     price:
-      $ref: '#/NonNegativeFloat'
-      description: 'Fare price, in the unit specified by `currency_type`.'
+      $ref: "#/NonNegativeFloat"
+      description: "Fare price, in the unit specified by `currency_type`."
     currency_type:
-      $ref: '#/CurrencyCode'
+      $ref: "#/CurrencyCode"
       description: Currency used to pay the fare.
     payment_method:
       type: string
-      enum: []
+      enum:
+        - "0"
+        - "1"
       description: |-
         Indicates when the fare must be paid. Valid options are:  
           
@@ -893,7 +957,11 @@ FareAttribute:
         `1` - Fare must be paid before boarding.
     transfers:
       type: string
-      enum: []
+      enum:
+        - null
+        - "0"
+        - "1"
+        - "2"
       description: >-
         Indicates the number of transfers permitted on this fare. The fact that
         this field can be left empty is an exception to the requirement that a
@@ -914,7 +982,7 @@ FareAttribute:
         [agency.txt](https://developers.google.com/transit/gtfs/reference#agencytxt),
         otherwise it is optional.
     transfer_duration:
-      $ref: '#/NonNegativeInteger'
+      $ref: "#/NonNegativeInteger"
       description: >-
         Length of time in seconds before a transfer expires. When
         `transfers`\=`0` this field can be used to indicate how long a ticket is
@@ -1033,16 +1101,16 @@ Shape:
       type: string
       description: Identifies a shape.
     shape_pt_lat:
-      $ref: '#/Latitude'
+      $ref: "#/Latitude"
       description: >-
         Latitude of a shape point. Each record in
         [shapes.txt](https://developers.google.com/transit/gtfs/reference#shapestxt)
         represents a shape point used to define the shape.
     shape_pt_lon:
-      $ref: '#/Longitude'
+      $ref: "#/Longitude"
       description: Longitude of a shape point.
     shape_pt_sequence:
-      $ref: '#/NonNegativeInteger'
+      $ref: "#/NonNegativeInteger"
       description: >-
         Sequence in which the shape points connect to form the shape. Values
         must increase along the trip but do not need to be consecutive.
@@ -1063,7 +1131,7 @@ Shape:
 
         `A_shp,37.65863,-122.30839,11`
     shape_dist_traveled:
-      $ref: '#/NonNegativeFloat'
+      $ref: "#/NonNegativeFloat"
       description: >-
         Actual distance traveled along the shape from the first shape point to
         the point specified in this record. Used by trip planners to show the
@@ -1099,17 +1167,17 @@ Frequency:
       type: string
       description: Identifies a trip to which the specified headway of service applies.
     start_time:
-      $ref: '#/MultiDayTime'
+      $ref: "#/MultiDayTime"
       description: >-
         Time at which the first vehicle departs from the first stop of the trip
         with the specified headway.
     end_time:
-      $ref: '#/MultiDayTime'
+      $ref: "#/MultiDayTime"
       description: >-
         Time at which service changes to a different headway (or ceases) at the
         first stop in the trip.
     headway_secs:
-      $ref: '#/NonNegativeInteger'
+      $ref: "#/NonNegativeInteger"
       description: >-
         Time, in seconds, between departures from the same stop (headway) for
         the trip, during the time interval specified by `start_time` and
@@ -1118,7 +1186,9 @@ Frequency:
         ends.
     exact_times:
       type: string
-      enum: []
+      enum:
+        - "0"
+        - "1"
       description: >-
         Indicates the type of service for a trip. See the file description for
         more information. Valid options are:  
@@ -1150,7 +1220,11 @@ Transfer:
         stops.
     transfer_type:
       type: string
-      enum: []
+      enum:
+        - "0"
+        - "1"
+        - "2"
+        - "3"
       description: >-
         Indicates the type of connection for the specified (`from_stop_id`,
         `to_stop_id`) pair. Valid options are:  
@@ -1167,7 +1241,7 @@ Transfer:
 
         `3` - Transfers are not possible between routes at the location.
     min_transfer_time:
-      $ref: '#/NonNegativeInteger'
+      $ref: "#/NonNegativeInteger"
       description: >-
         Amount of time, in seconds, that must be available to permit a transfer
         between routes at the specified stops. The `min_transfer_time` should be
@@ -1208,7 +1282,15 @@ Pathway:
         the `stops.txt` file.
     pathway_mode:
       type: string
-      enum: []
+      enum:
+        - "0"
+        - "1"
+        - "2"
+        - "3"
+        - "4"
+        - "5"
+        - "6"
+        - "7"
       description: >-
         Type of pathway between the specified (`from_stop_id`, `to_stop_id`)
         pair. Valid values for this field are:  
@@ -1239,7 +1321,9 @@ Pathway:
         longer required.
     is_bidirectional:
       type: string
-      enum: []
+      enum:
+        - "0"
+        - "1"
       description: >-
         Indicates in which direction the pathway can be used:  
 
@@ -1251,7 +1335,7 @@ Pathway:
         Fare gates (`pathway_mode=6`) and exit gates (`pathway_mode=7`) cannot
         be bidirectional.
     length:
-      $ref: '#/NonNegativeFloat'
+      $ref: "#/NonNegativeFloat"
       description: >-
         Horizontal length in meters of the pathway from the origin location
         (defined in `from_stop_id`) to the destination location (defined in
@@ -1260,7 +1344,7 @@ Pathway:
         This field is recommended for walkways (`pathway_mode=1`), fare gates
         (`pathway_mode=6`) and exit gates (`pathway_mode=7`).
     traversal_time:
-      $ref: '#/PositiveInteger'
+      $ref: "#/PositiveInteger"
       description: >-
         Average time in seconds needed to walk through the pathway from the
         origin location (defined in `from_stop_id`) to the destination location
@@ -1269,7 +1353,7 @@ Pathway:
         This field is recommended for moving sidewalks (`pathway_mode=3`),
         escalators (`pathway_mode=4`) and elevator (`pathway_mode=5`).
     stair_count:
-      $ref: '#/NonNullInteger'
+      $ref: "#/NonNullInteger"
       description: >-
         Number of stairs of the pathway.  
           
@@ -1299,21 +1383,21 @@ Pathway:
         for hand-propelled wheelchair, which mean an increase of 0.083m (so
         8.3cm) for each 1m.
     min_width:
-      $ref: '#/PositiveFloat'
+      $ref: "#/PositiveFloat"
       description: >-
         Minimum width of the pathway in meters.  
           
         This field is highly recommended if the minimum width is less than 1
         meter.
     signposted_as:
-      $ref: '#/Text'
+      $ref: "#/Text"
       description: >-
         String of text from physical signage visible to transit riders. The
         string can be used to provide text directions to users, such as 'follow
         signs to '. The language text should appear in this field exactly how it
         is printed on the signs - it should not be translated.
     reversed_signposted_as:
-      $ref: '#/Text'
+      $ref: "#/Text"
       description: >-
         Same than the `signposted_as` field, but when the pathways is used
         backward, i.e. from the `to_stop_id` to the `from_stop_id`.
@@ -1337,7 +1421,7 @@ Level:
         Ground level should have index 0, with levels above ground indicated by
         positive indices and levels below ground by negative indices.
     level_name:
-      $ref: '#/Text'
+      $ref: "#/Text"
       description: >-
         Optional name of the level (that matches level lettering/numbering used
         inside the building or the station). Is useful for elevator routing
@@ -1350,17 +1434,17 @@ FeedInfo:
     - feed_lang
   properties:
     feed_publisher_name:
-      $ref: '#/Text'
+      $ref: "#/Text"
       description: >-
         Full name of the organization that publishes the dataset. This might be
         the same as one of the `agency.agency_name` values.
     feed_publisher_url:
-      $ref: '#/URL'
+      $ref: "#/URL"
       description: >-
         URL of the dataset publishing organization's website. This may be the
         same as one of the `agency.agency_url` values.
     feed_lang:
-      $ref: '#/LanguageCode'
+      $ref: "#/LanguageCode"
       description: >-
         Default language for the text in this dataset. This setting helps GTFS
         consumers choose capitalization rules and other language-specific
@@ -1396,12 +1480,12 @@ FeedInfo:
 
         *   **English:** "Geneva," "Zurich," and "Biel/Bienne"
     default_lang:
-      $ref: '#/LanguageCode'
+      $ref: "#/LanguageCode"
       description: >-
         Defines the language used when the data consumer doesn’t know the
         language of the rider. It's often defined as `en`, English.
     feed_start_date:
-      $ref: '#/Date'
+      $ref: "#/Date"
       description: >-
         The dataset provides complete and reliable schedule information for
         service in the period from the beginning of the `feed_start_date` day to
@@ -1419,16 +1503,16 @@ FeedInfo:
         dates within the `feed_start_date` to `feed_end_date` range but not
         included in the active calendar dates.
     feed_end_date:
-      $ref: '#/Date'
+      $ref: "#/Date"
       description: Refer to the `feed_start_date` row in this table.
     feed_version:
-      $ref: '#/Text'
+      $ref: "#/Text"
       description: >-
         String that indicates the current version of their GTFS dataset.
         GTFS-consuming applications can display this value to help dataset
         publishers determine whether the latest dataset has been incorporated.
     feed_contact_email:
-      $ref: '#/Email'
+      $ref: "#/Email"
       description: >-
         Email address for communication regarding the GTFS dataset and data
         publishing practices. `feed_contact_email` is a technical contact for
@@ -1436,7 +1520,7 @@ FeedInfo:
         information through
         [agency.txt](https://developers.google.com/transit/gtfs/reference#agencytxt).
     feed_contact_url:
-      $ref: '#/URL'
+      $ref: "#/URL"
       description: >-
         URL for contact information, a web-form, support desk, or other tools
         for communication regarding the GTFS dataset and data publishing
@@ -1453,7 +1537,16 @@ Translation:
   properties:
     table_name:
       type: string
-      enum: []
+      enum:
+        - "agency"
+        - "stops"
+        - "routes"
+        - "trips"
+        - "stop_times"
+        - "feed_info"
+        - "pathways"
+        - "levels"
+        - "attributions"
       description: >-
         Defines the dataset table that contains the field to be translated. The
         following values are allowed:
@@ -1480,7 +1573,7 @@ Translation:
 
         **Note:** Don't include the .txt file extension after the table's name.
     field_name:
-      $ref: '#/Text'
+      $ref: "#/Text"
       description: >-
         Provides the name of the field to be translated. Fields with the type
         "Text" can be translated, while fields with the types "URL," "Email,"
@@ -1491,7 +1584,7 @@ Translation:
         **Note:** Fields with other types are ignored and will not be
         translated.
     language:
-      $ref: '#/LanguageCode'
+      $ref: "#/LanguageCode"
       description: >-
         Provides the language of translation.
 
@@ -1507,10 +1600,10 @@ Translation:
         and "Biel" in German.
     translation:
       oneOf:
-        - $ref: '#/Text'
-        - $ref: '#/URL'
-        - $ref: '#/Email'
-        - $ref: '#/PhoneNumber'
+        - $ref: "#/Text"
+        - $ref: "#/URL"
+        - $ref: "#/Email"
+        - $ref: "#/PhoneNumber"
       description: Provides the translated value for the specified `field_name`.
     record_id:
       type: string
@@ -1656,10 +1749,10 @@ Translation:
         defined.
     field_value:
       oneOf:
-        - $ref: '#/Text'
-        - $ref: '#/URL'
-        - $ref: '#/Email'
-        - $ref: '#/PhoneNumber'
+        - $ref: "#/Text"
+        - $ref: "#/URL"
+        - $ref: "#/Email"
+        - $ref: "#/PhoneNumber"
       description: >-
         Instead of using `record_id` and `record_sub_id` to define which record
         needs to be translated, `field_value` can be used to define the value
@@ -1690,6 +1783,9 @@ Attribution:
   type: object
   required:
     - organization_name
+  description: >-
+    At least one of the fields, either `is_producer`, `is_operator`, or
+    `is_authority`, must be set at `1`.
   properties:
     attribution_id:
       type: string
@@ -1716,39 +1812,20 @@ Attribution:
         attribution applies to a trip. Multiple attributions can apply to the
         same trip.
     organization_name:
-      $ref: '#/Text'
+      $ref: "#/Text"
       description: The name of the organization that the dataset is attributed to.
     is_producer:
-      type: string
-      enum: []
-      description: >-
-        The role of the organization is producer. Allowed values include the
-        following:  
-
-        • `0` or empty: Organization doesn’t have this role.  
-
-        • `1`: Organization does have this role.  
-
-        At least one of the fields, either `is_producer`, `is_operator`, or
-        `is_authority`, must be set at `1`.
+      $ref: "#/OrganizationHasRole"
     is_operator:
-      type: string
-      enum: []
-      description: >-
-        Functions in the same way as `is_producer`, except the role of the
-        organization is operator.
+      $ref: "#/OrganizationHasRole"
     is_authority:
-      type: string
-      enum: []
-      description: >-
-        Functions in the same way as `is_producer`, except the role of the
-        organization is authority.
+      $ref: "#/OrganizationHasRole"
     attribution_url:
-      $ref: '#/URL'
+      $ref: "#/URL"
       description: The URL of the organization.
     attribution_email:
-      $ref: '#/Email'
+      $ref: "#/Email"
       description: The email of the organization.
     attribution_phone:
-      $ref: '#/PhoneNumber'
+      $ref: "#/PhoneNumber"
       description: The phone number of the organization.
