@@ -2,7 +2,6 @@ import * as fs from "fs";
 // @ts-ignore
 import { write } from "node-yaml";
 import TurndownService from "turndown";
-import pluralize from "pluralize";
 
 interface Asset {
   fileName: string;
@@ -69,36 +68,36 @@ class Parser {
     const json = fs.readFileSync("src/documentation.json").toString();
 
     const formattedAssets: OpenAPIObject = {
-      Color: {
+      color: {
         type: "string",
         format: "hex",
         pattern: "/^[A-F0-9]{6}$/",
         example: "FFFFFF",
       },
-      CurrencyCode: {
+      currency_code: {
         type: "string",
         format: "ISO 4217",
         "x-faker": "finance.currencyCode",
         example: "CAD",
       },
-      Date: {
+      date: {
         type: "string",
         format: "date",
         example: "20180913",
       },
-      Email: {
+      email: {
         type: "string",
         format: "email",
         "x-faker": "internet.exampleEmail",
         example: "example@example.com",
       },
-      LanguageCode: {
+      language_code: {
         type: "string",
         format: "IETF BCP 47",
         "x-faker": "random.locale",
         example: "en-US",
       },
-      Latitude: {
+      latitude: {
         type: "number",
         format: "double",
         minimum: -90.0,
@@ -106,7 +105,7 @@ class Parser {
         "x-faker": "address.latitude",
         example: 41.890169,
       },
-      Longitude: {
+      longitude: {
         type: "number",
         format: "double",
         minimum: -180.0,
@@ -114,18 +113,18 @@ class Parser {
         "x-faker": "address.longitude",
         example: 12.492269,
       },
-      MultiDayTime: {
+      multi_day_time: {
         type: "string",
         format: 'Time from "noon minus 12h", 24h+ format',
         pattern: "^\\d{2}:[0-5][0-9]$",
         example: "25:35:00",
       },
-      NonNegativeFloat: {
+      non_negative_float: {
         minimum: 0,
         type: "number",
         format: "float",
       },
-      NonNegativeInteger: {
+      non_negative_integer: {
         type: "integer",
         minimum: 0,
       },
@@ -141,32 +140,32 @@ class Parser {
           },
         ],
       },
-      PhoneNumber: {
+      phone_number: {
         type: "string",
         format: "phone",
         "x-faker": "phone.phoneNumber",
       },
-      PositiveFloat: {
+      positive_float: {
         minimum: 1,
         type: "number",
         format: "float",
       },
-      PositiveInteger: {
+      positive_integer: {
         type: "integer",
         minimum: 1,
       },
-      Text: {
+      text: {
         description: "Human-readable text",
         type: "string",
         "x-faker": "lorem.paragraph",
       },
-      Timezone: {
+      timezone: {
         type: "string",
         format: "tz",
         pattern: "^[w/]*$",
         example: "America/Los_Angeles",
       },
-      URL: {
+      url: {
         type: "string",
         format: "url",
         "x-faker": "internet.url",
@@ -180,9 +179,7 @@ class Parser {
         formattedProperties[property.fieldName] = this.parseProperty(property);
       });
 
-      formattedAssets[
-        pluralize.singular(asset.fileName.snakeToCamel().capitalize())
-      ] = {
+      formattedAssets[asset.fileName] = {
         type: "object",
         required: asset.properties
           .filter((property) => property.required)
@@ -191,7 +188,23 @@ class Parser {
       };
     });
 
-    await write("output.yaml", formattedAssets);
+    const definition = {
+      openapi: "3.0.3",
+      info: {
+        version: "1.0.0",
+        title: "GTFS generated models",
+        description:
+          "Models generated using https://github.com/alexandre-okidoo/swagger-gtfs by Alexandre Croteau\n\nPortions of this document are reproduced from work created and shared by Google and used according to terms described in the Creative Commons 4.0 Attribution License. Original documentation on which this document is based is available at and available at https://developers.google.com/transit/gtfs/reference",
+        license: {
+          name: "Creative Commons Attribution 4.0",
+          url: "https://creativecommons.org/licenses/by/4.0/",
+        },
+      },
+      paths: {},
+      components: { schemas: formattedAssets },
+    };
+
+    await write("output.yaml", definition);
   }
 
   private parseProperty(property: Asset["properties"]["0"]): OpenAPIProperty {
@@ -201,10 +214,10 @@ class Parser {
     }
 
     const typesMapping: { [index: string]: OpenAPIProperty } = {
-      color: { $ref: "#/Color" },
-      "currency code": { $ref: "#/CurrencyCode" },
-      date: { $ref: "#/Date" },
-      email: { $ref: "#/Email" },
+      color: { $ref: "#/components/schemas/color" },
+      "currency code": { $ref: "#/components/schemas/currency_code" },
+      date: { $ref: "#/components/schemas/date" },
+      email: { $ref: "#/components/schemas/email" },
       enum: {
         type: "string",
         enum: [],
@@ -213,66 +226,66 @@ class Parser {
         type: "string",
       },
       "language code": {
-        $ref: "#/LanguageCode",
+        $ref: "#/components/schemas/language_code",
       },
 
       latitude: {
-        $ref: "#/Latitude",
+        $ref: "#/components/schemas/latitude",
       },
       longitude: {
-        $ref: "#/Longitude",
+        $ref: "#/components/schemas/longitude",
       },
       "positive float": {
-        $ref: "#/PositiveFloat",
+        $ref: "#/components/schemas/positive_float",
       },
       "non-negative float": {
-        $ref: "#/NonNegativeFloat",
+        $ref: "#/components/schemas/non_negative_float",
       },
       float: {
         type: "number",
         format: "float",
       },
       "positive integer": {
-        $ref: "#/PositiveInteger",
+        $ref: "#/components/schemas/positive_integer",
       },
       "non-negative integer": {
-        $ref: "#/NonNegativeInteger",
+        $ref: "#/components/schemas/non_negative_integer",
       },
       "non-null integer": {
-        $ref: "#/NonNullInteger",
+        $ref: "#/components/schemas/non_null_integer",
       },
       integer: {
         type: "integer",
       },
       "phone number": {
-        $ref: "#/PhoneNumber",
+        $ref: "#/components/schemas/phone_number",
       },
       time: {
-        $ref: "#/MultiDayTime",
+        $ref: "#/components/schemas/multi_day_time",
       },
       text: {
-        $ref: "#/Text",
+        $ref: "#/components/schemas/text",
       },
       timezone: {
-        $ref: "#/Timezone",
+        $ref: "#/components/schemas/timezone",
       },
       url: {
-        $ref: "#/URL",
+        $ref: "#/components/schemas/url",
       },
       "text, url, email, or phone number": {
         oneOf: [
           {
-            $ref: "#/Text",
+            $ref: "#/components/schemas/text",
           },
           {
-            $ref: "#/URL",
+            $ref: "#/components/schemas/url",
           },
           {
-            $ref: "#/Email",
+            $ref: "#/components/schemas/email",
           },
 
           {
-            $ref: "#/PhoneNumber",
+            $ref: "#/components/schemas/phone_number",
           },
         ],
       },
