@@ -117,7 +117,6 @@ components:
       type: string
       nullable: true
       enum:
-        - null
         - "0"
         - "1"
       description: >-
@@ -272,8 +271,8 @@ components:
             the `agency.agency_url` and the `routes.route_url` field values.
         location_type:
           type: string
+          nullable: true
           enum:
-            - null
             - "0"
             - "1"
             - "2"
@@ -847,8 +846,8 @@ components:
             start of the shape to the stop,`shape_dist_traveled`\=`5.25`._
         timepoint:
           type: string
+          nullable: true
           enum:
-            - null
             - "0"
             - "1"
           description: >-
@@ -988,8 +987,8 @@ components:
             `1` - Fare must be paid before boarding.
         transfers:
           type: string
+          nullable: true
           enum:
-            - null
             - "0"
             - "1"
             - "2"

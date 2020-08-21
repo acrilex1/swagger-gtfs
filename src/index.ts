@@ -181,7 +181,7 @@ class Parser {
       organization_has_role: {
         type: "string",
         nullable: true,
-        enum: ["null", "0", "1"],
+        enum: ["0", "1"],
         description:
           "The organization has this role. Allowed values include the following:  \n• `0` or empty: Organization doesn’t have this role.  \n• `1`: Organization does have this role.",
       },
