@@ -29,6 +29,7 @@ interface OpenAPIProperty {
   oneOf?: OpenAPIProperty[];
   allOf?: OpenAPIProperty[];
   required?: string[];
+  nullable?: boolean;
   properties?: {
     [propertyName: string]: OpenAPIProperty;
   };
@@ -128,7 +129,7 @@ class Parser {
         type: "integer",
         minimum: 0,
       },
-      NonNullInteger: {
+      non_null_integer: {
         oneOf: [
           {
             type: "integer",
@@ -169,6 +170,20 @@ class Parser {
         type: "string",
         format: "url",
         "x-faker": "internet.url",
+      },
+      // Taken from ENUMs that are reused multiple times (See README.md#Acknowledgement)
+      calendar_day: {
+        type: "string",
+        enum: ["0", "1"],
+        description:
+          "DOW: Single Day of the week (monday, tuesday, etc.)\nIndicates whether the service operates on all DOW in the date range specified by the `startDate` and `endDate` fields. Note that exceptions for particular dates may be listed in [calendar\\_dates.txt](https://developers.google.com/transit/gtfs/reference#calendar_datestxt). Valid options are:  \n  \n`1` - Service is available for all DOW in the date range.  \n`0` - Service is not available for DOW in the date range.",
+      },
+      organization_has_role: {
+        type: "string",
+        nullable: true,
+        enum: ["null", "0", "1"],
+        description:
+          "The organization has this role. Allowed values include the following:  \n• `0` or empty: Organization doesn’t have this role.  \n• `1`: Organization does have this role.",
       },
     };
 

@@ -66,7 +66,7 @@ components:
     non_negative_integer:
       type: integer
       minimum: 0
-    NonNullInteger:
+    non_null_integer:
       oneOf:
         - type: integer
           minimum: 1
@@ -96,6 +96,37 @@ components:
       type: string
       format: url
       x-faker: internet.url
+    calendar_day:
+      type: string
+      enum:
+        - "0"
+        - "1"
+      description: >-
+        DOW: Single Day of the week (monday, tuesday, etc.)
+
+        Indicates whether the service operates on all DOW in the date range
+        specified by the `startDate` and `endDate` fields. Note that
+        exceptions for particular dates may be listed in
+        [calendar\_dates.txt](https://developers.google.com/transit/gtfs/reference#calendar_datestxt).
+        Valid options are:  
+          
+        `1` - Service is available for all DOW in the date range.  
+
+        `0` - Service is not available for DOW in the date range.
+    organization_has_role:
+      type: string
+      nullable: true
+      enum:
+        - null
+        - "0"
+        - "1"
+      description: >-
+        The organization has this role. Allowed values include the
+        following:  
+
+        • `0` or empty: Organization doesn’t have this role.  
+
+        • `1`: Organization does have this role.
     agency:
       type: object
       required:
@@ -852,19 +883,19 @@ components:
             [calendar.txt](https://developers.google.com/transit/gtfs/reference#calendartxt)
             file.
         monday:
-          $ref: "#/CalendarDay"
+          $ref: "#/components/schemas/calendar_day"
         tuesday:
-          $ref: "#/CalendarDay"
+          $ref: "#/components/schemas/calendar_day"
         wednesday:
-          $ref: "#/CalendarDay"
+          $ref: "#/components/schemas/calendar_day"
         thursday:
-          $ref: "#/CalendarDay"
+          $ref: "#/components/schemas/calendar_day"
         friday:
-          $ref: "#/CalendarDay"
+          $ref: "#/components/schemas/calendar_day"
         saturday:
-          $ref: "#/CalendarDay"
+          $ref: "#/components/schemas/calendar_day"
         sunday:
-          $ref: "#/CalendarDay"
+          $ref: "#/components/schemas/calendar_day"
         start_date:
           $ref: "#/components/schemas/date"
           description: Start service day for the service interval.
@@ -1822,11 +1853,11 @@ components:
           $ref: "#/components/schemas/text"
           description: The name of the organization that the dataset is attributed to.
         is_producer:
-          $ref: "#/OrganizationHasRole"
+          $ref: "#/components/schemas/organization_has_role"
         is_operator:
-          $ref: "#/OrganizationHasRole"
+          $ref: "#/components/schemas/organization_has_role"
         is_authority:
-          $ref: "#/OrganizationHasRole"
+          $ref: "#/components/schemas/organization_has_role"
         attribution_url:
           $ref: "#/components/schemas/url"
           description: The URL of the organization.
