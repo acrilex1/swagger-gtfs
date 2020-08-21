@@ -4,16 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
     "start": "npm run build && node build/index.js",
     "start:dev": "nodemon --inspect-brk=9929",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Alexandre Croteau",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^14.0.23",
-    "@types/pluralize": "0.0.29",
     "@types/turndown": "^5.0.0",
     "nodemon": "^2.0.4",
     "ts-node": "^8.10.2",
@@ -22,7 +22,6 @@
   "dependencies": {
     "js-yaml": "^3.14.0",
     "node-yaml": "^4.0.1",
-    "pluralize": "^8.0.0",
     "turndown": "^6.0.0"
   }
 }
