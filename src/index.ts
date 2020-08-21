@@ -204,7 +204,7 @@ class Parser {
       components: { schemas: formattedAssets },
     };
 
-    await write("output.yaml", definition);
+    await write("../openapi-gtfs.yaml", definition);
   }
 
   private parseProperty(property: Asset["properties"]["0"]): OpenAPIProperty {
