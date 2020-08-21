@@ -1,8 +1,3 @@
-# Generate JSON
-
-Open [reference](https://developers.google.com/transit/gtfs/reference) in browser (Chrome tested) and execute following script in console:
-
-```javascript
 String.prototype.replaceRelativeLinks = function () {
   return this.replace(/href=\"\//g, `href="${window.location.origin}/`);
 };
@@ -63,6 +58,3 @@ let r = Array.from(document.querySelectorAll("h3[tabindex]"))
     };
   });
 JSON.stringify(r);
-```
-
-Save the result in `documentation.yaml`
